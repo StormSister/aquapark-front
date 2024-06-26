@@ -1,12 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const Navbar = ({  isLoggedIn = false, userRole = 'notLoggedIn', onLogout }) => {
+const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userRole');
     onLogout();
+    navigate('/');
   };
 
   const renderNavLinks = () => {
@@ -17,14 +18,13 @@ const Navbar = ({  isLoggedIn = false, userRole = 'notLoggedIn', onLogout }) => 
         { label: 'Register', path: '/register' },
         { label: 'Book a Room', path: '/book-room' },
         { label: 'Buy Tickets', path: '/buy-tickets' },
-        { label: 'Greeting', path: '/greeting' }
-
+        { label: 'Greeting', path: '/greeting' },
       ],
       client: [
         { label: 'Home', path: '/' },
         { label: 'Book a Room', path: '/book-room' },
         { label: 'Buy Tickets', path: '/buy-tickets' },
-        { label: 'Your Account', path: '/your-account' }
+        { label: 'Your Account', path: '/your-account' },
       ],
       worker: [
         { label: 'Home', path: '/' },
@@ -32,7 +32,7 @@ const Navbar = ({  isLoggedIn = false, userRole = 'notLoggedIn', onLogout }) => 
         { label: 'Check Ticket', path: '/check-ticket' },
         { label: 'Book a Room', path: '/book-room' },
         { label: 'Cancel Reservation', path: '/cancel-reservation' },
-        { label: 'Your Account', path: '/your-account' }
+        { label: 'Your Account', path: '/your-account' },
       ],
       manager: [
         { label: 'Home', path: '/' },
@@ -42,8 +42,9 @@ const Navbar = ({  isLoggedIn = false, userRole = 'notLoggedIn', onLogout }) => 
         { label: 'Cancel Reservation', path: '/cancel-reservation' },
         { label: 'Change Price', path: '/change-price' },
         { label: 'Add Promotion', path: '/add-promotion' },
-        { label: 'Your Account', path: '/your-account' }
-      ]
+        { label: 'Your Account', path: '/your-account' },
+        { label: 'Users', path: '/manage-users' },
+      ],
     };
 
     const links = isLoggedIn ? navLinks[userRole] : navLinks.notLoggedIn;
@@ -76,8 +77,8 @@ const Navbar = ({  isLoggedIn = false, userRole = 'notLoggedIn', onLogout }) => 
       </div>
     </nav>
   );
+};
 
-}
 Navbar.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   userRole: PropTypes.string.isRequired,
@@ -85,6 +86,7 @@ Navbar.propTypes = {
 };
 
 export default Navbar;
+
 
 
 

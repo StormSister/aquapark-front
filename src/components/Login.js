@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // Wywołanie funkcji logowania na serwerze
       const response = await fetch('http://localhost:8080/api/login', {
         method: 'POST',
         headers: {
@@ -21,7 +22,8 @@ const Login = ({ onLogin }) => {
         throw new Error('Invalid credentials');
       }
       const data = await response.json();
-      onLogin(data.accessToken, data.role); // Przekazanie danych zalogowania do komponentu nadrzędnego
+      onLogin(data.accessToken, data.role); // Update the parent's state
+      navigate('/'); // Redirect to the homepage
     } catch (error) {
       console.error('Login error:', error);
     }

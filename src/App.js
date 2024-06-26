@@ -11,6 +11,7 @@ import ManagerDashboard from './components/ManagerDashboard';
 import Navbar from './components/Navbar';
 import YourAccount from './components/YourAccount'; 
 import Greeting from './components/Greeting';
+import Users from './components/Users';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -37,18 +38,31 @@ const App = () => {
     setUserRole(role);
   };
 
-  // Funkcja do wylogowania
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userRole');
     setIsLoggedIn(false);
     setUserRole('notLoggedIn');
+
+    // Call the logout endpoint
+    fetch('http://localhost:8080/api/logout', {
+      method: 'POST',
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+      console.log('User logged out successfully.');
+    })
+    .catch(error => {
+      console.error('Logout error:', error);
+    });
   };
 
   return (
     <Router>
       <div className="App">
-      <Navbar isLoggedIn={isLoggedIn} userRole={userRole} onLogout={() => {}} />
+      <Navbar isLoggedIn={isLoggedIn} userRole={userRole} onLogout={handleLogout} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
@@ -60,6 +74,7 @@ const App = () => {
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/your-account" element={<YourAccount />} /> 
           <Route path="/greeting" element={<Greeting />} />
+          <Route path="/manage-users" element={<Users />} />
         </Routes>
       </div>
     </Router>
