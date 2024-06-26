@@ -10,7 +10,7 @@ const Login = ({ onLogin }) => {
     event.preventDefault();
     try {
       // Wywołanie funkcji logowania na serwerze
-      const response = await fetch('http://example.com/login', {
+      const response = await fetch('http://localhost:8080/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
