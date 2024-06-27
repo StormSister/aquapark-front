@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const EditUser = ({ user, onUpdateUser, onDeleteUser }) => {
-  const [editedUser, setEditedUser] = useState({ ...user });
+const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn }) => {
+  const [editedUser, setEditedUser] = useState({});
+
+  useEffect(() => {
+    if (user) {
+      setEditedUser({ ...user }); // Ustawiamy klon obiektu user
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -10,22 +16,39 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdateUser(editedUser);
+    const userToUpdate = isLoggedIn && isLoggedIn.role === 'manager'
+      ? { ...editedUser, password: undefined }
+      : editedUser;
+    onUpdateUser(userToUpdate);
   };
 
   const handleDelete = () => {
     onDeleteUser(user.id);
   };
 
+  if (!user) {
+    return <div>Loading...</div>; // Można dodać inny komunikat lub loader
+  }
+
   return (
     <div>
       <h2>Edit User</h2>
       <form onSubmit={handleSubmit}>
-        <input type="text" name="username" value={editedUser.username} onChange={handleChange} readOnly />
-        <input type="text" name="firstName" value={editedUser.firstName} onChange={handleChange} />
-        <input type="text" name="lastName" value={editedUser.lastName} onChange={handleChange} />
-        <input type="text" name="phoneNumber" value={editedUser.phoneNumber} onChange={handleChange} />
-        <input type="text" name="role" value={editedUser.role} onChange={handleChange} />
+        <label>Username:</label>
+        <input type="text" name="username" value={editedUser.username || ''} onChange={handleChange} readOnly />
+        <br />
+        <label>First Name:</label>
+        <input type="text" name="firstName" value={editedUser.firstName || ''} onChange={handleChange} />
+        <br />
+        <label>Last Name:</label>
+        <input type="text" name="lastName" value={editedUser.lastName || ''} onChange={handleChange} />
+        <br />
+        <label>Phone Number:</label>
+        <input type="text" name="phoneNumber" value={editedUser.phoneNumber || ''} onChange={handleChange} />
+        <br />
+        <label>Role:</label>
+        <input type="text" name="role" value={editedUser.role || ''} onChange={handleChange} />
+        <br />
         <button type="submit">Update</button>
         <button type="button" onClick={handleDelete}>Delete</button>
       </form>
@@ -34,3 +57,5 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser }) => {
 };
 
 export default EditUser;
+
+

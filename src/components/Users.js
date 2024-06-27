@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import UsersList from './UsersList'; // Załóżmy, że masz komponent UsersList
+import UsersList from './UsersList';
+import EditUser from './EditUser';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -13,6 +14,7 @@ const Users = () => {
     role: ''
   });
   const [loadedAllUsers, setLoadedAllUsers] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null); // Wybrany użytkownik do edycji
 
   useEffect(() => {
     if (loadedAllUsers) {
@@ -20,9 +22,13 @@ const Users = () => {
     }
   }, [loadedAllUsers]);
 
+  useEffect(() => {
+    fetchAllUsers(); // Pobieramy użytkowników na starcie
+  }, []);
+
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api');
+      const response = await axios.get('http://localhost:8080/api/users');
       console.log('Fetched all users:', response.data);
       setUsers(response.data);
     } catch (error) {
@@ -33,15 +39,24 @@ const Users = () => {
   const handleShowAllUsers = () => {
     setFilteredUsers([]);
     setLoadedAllUsers(true);
+    setSelectedUser(null); // Resetujemy wybranego użytkownika
   };
 
   const handleSearch = async () => {
     try {
-      const query = new URLSearchParams(searchParams).toString();
-      const response = await axios.get(`http://localhost:8080/api/search?${query}`);
+      const query = {
+        username: searchParams.username || null,
+        firstName: searchParams.firstName || null,
+        lastName: searchParams.lastName || null,
+        phoneNumber: searchParams.phoneNumber || null,
+        role: searchParams.role || null
+      };
+
+      const response = await axios.get(`http://localhost:8080/api/search`, { params: query });
       console.log('Search results:', response.data);
       setFilteredUsers(response.data);
       setLoadedAllUsers(false);
+      setSelectedUser(null); // Resetujemy wybranego użytkownika
     } catch (error) {
       console.error('Error searching users:', error);
     }
@@ -61,6 +76,37 @@ const Users = () => {
     });
     setFilteredUsers([]);
     setLoadedAllUsers(false);
+    setSelectedUser(null); // Resetujemy wybranego użytkownika
+  };
+
+  const handleUserSelect = (userId) => {
+    console.log(`Selected user with ID: ${userId}`);
+    console.log('Users:', users); // Sprawdzenie, czy users jest ustawione przed wyszukiwaniem
+    const user = users.find(user => user.id === userId);
+    console.log('Selected user:', user); // Sprawdzenie, czy użytkownik został znaleziony
+    setSelectedUser(user); // Ustawienie wybranego użytkownika po kliknięciu
+  };
+
+  const handleUpdateUser = async (updatedUser) => {
+    try {
+      const response = await axios.put(`http://localhost:8080/api/users/${updatedUser.id}`, updatedUser);
+      console.log('Updated user:', response.data);
+      fetchAllUsers();
+      setSelectedUser(null); // Resetujemy wybranego użytkownika
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/users/${userId}`);
+      console.log('Deleted user with ID:', userId);
+      fetchAllUsers();
+      setSelectedUser(null); // Resetujemy wybranego użytkownika
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
   };
 
   return (
@@ -76,8 +122,17 @@ const Users = () => {
         <button onClick={clearSearchParams}>Clear</button>
         <button onClick={handleShowAllUsers}>Show All Users</button>
       </div>
-      {(users.length > 0 || filteredUsers.length > 0) && (
-        <UsersList users={filteredUsers.length > 0 ? filteredUsers : users} />
+
+      {selectedUser ? (
+        <EditUser
+          user={selectedUser}
+          onUpdateUser={handleUpdateUser}
+          onDeleteUser={handleDeleteUser}
+        />
+      ) : (
+        (users.length > 0 || filteredUsers.length > 0) && (
+          <UsersList users={filteredUsers.length > 0 ? filteredUsers : users} onUserSelect={handleUserSelect} />
+        )
       )}
     </div>
   );

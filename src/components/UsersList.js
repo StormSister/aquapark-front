@@ -1,18 +1,20 @@
 import React from 'react';
 
 const UsersList = ({ users, onUserSelect }) => {
-  const handleUserClick = (user) => {
-    onUserSelect(user);
+  const handleUserClick = (userId) => {
+    console.log(`Selected user with ID: ${userId}`);
+    if (onUserSelect) {
+      onUserSelect(userId);
+    }
   };
 
   return (
     <div>
-      <h2>All Users</h2>
+      <h2>Users List</h2>
       <ul>
         {users.map((user) => (
-          <li key={user.id} onClick={() => handleUserClick(user)}>
+          <li key={user.id} onClick={() => handleUserClick(user.id)}>
             {user.username}
-            {user.phoneNumer}
           </li>
         ))}
       </ul>
