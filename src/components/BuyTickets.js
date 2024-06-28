@@ -6,11 +6,15 @@ const BuyTickets = () => {
     const navigate = useNavigate();
 
     // Definicja schematu walidacji
-    const schema = yup.object().shape({
-        email: yup.string().email().required(),
-        adults: yup.number().positive().integer().required(),
-        children: yup.number().positive().integer().required()
-    });
+    
+const schema = yup.object().shape({
+    email: yup.string().email().required(),
+    adults: yup.number().min(0).integer(),
+    children: yup.number().min(0).integer(),
+  }).test('sum-validation', 'Musisz wybrać co najmniej jedną osobę (dorosłego lub dziecko)', function(values) {
+    const { adults, children } = values;
+    return adults > 0 || children > 0;
+  }).required();
 
     // Stan komponentu
     const [email, setEmail] = useState('');
@@ -62,55 +66,55 @@ const BuyTickets = () => {
     };
 
     return (
-        <div>
-            <h1>Purchase Tickets</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    {errors && errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
-                </div>
-                <div>
-                    <label>Adults:</label>
-                    <input
-                        type="number"
-                        value={adults}
-                        onChange={(e) => setAdults(Number(e.target.value))}
-                        min="0"
-                        required
-                    />
-                    {errors && errors.adults && <p style={{ color: 'red' }}>{errors.adults}</p>}
-                </div>
-                <div>
-                    <label>Children:</label>
-                    <input
-                        type="number"
-                        value={children}
-                        onChange={(e) => setChildren(Number(e.target.value))}
-                        min="0"
-                        required
-                    />
-                    {errors && errors.children && <p style={{ color: 'red' }}>{errors.children}</p>}
-                </div>
-                <div>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={isGroup}
-                            onChange={(e) => setIsGroup(e.target.checked)}
-                        />
-                        Group Ticket
-                    </label>
-                </div>
-                <button type="submit">Purchase</button>
-            </form>
-            {message && <p>{message}</p>}
-        </div>
+<div>
+  <h1>Purchase Tickets</h1>
+  <form onSubmit={handleSubmit}>
+    <div>
+      <label>Email:</label>
+      <input
+        type="email"
+        defaultValue={email}  // Używamy defaultValue zamiast value
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      {errors && errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+    </div>
+    <div>
+      <label>Adults:</label>
+      <input
+        type="number"
+        defaultValue={adults.toString()}  // Konwertujemy na string
+        onChange={(e) => setAdults(Number(e.target.value))}
+        min="0"
+        required
+      />
+      {errors && errors.adults && <p style={{ color: 'red' }}>{errors.adults}</p>}
+    </div>
+    <div>
+      <label>Children:</label>
+      <input
+        type="number"
+        defaultValue={children.toString()}  // Konwertujemy na string
+        onChange={(e) => setChildren(Number(e.target.value))}
+        min="0"
+        required
+      />
+      {errors && errors.children && <p style={{ color: 'red' }}>{errors.children}</p>}
+    </div>
+    <div>
+      <label>
+        <input
+          type="checkbox"
+          checked={isGroup}
+          onChange={(e) => setIsGroup(e.target.checked)}
+        />
+        Group Ticket
+      </label>
+    </div>
+    <button type="submit">Purchase</button>
+  </form>
+  {message && <p>{message}</p>}
+</div>
     );
 };
 

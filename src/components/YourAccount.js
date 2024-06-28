@@ -2,37 +2,48 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const YourAccount = () => {
-    const [ticketUrls, setTicketUrls] = useState([]);
-    const userEmail = localStorage.getItem('userEmail'); // assuming userEmail is stored in local storage
+    const [ticketPaths, setTicketPaths] = useState([]);
+    const userEmail = localStorage.getItem('userEmail'); 
 
     useEffect(() => {
+        if (!userEmail) {
+            console.error('User email not found in local storage');
+            return;
+        }
+
+        console.log('Fetching tickets for user:', userEmail); 
+
         const fetchUserTickets = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/tickets/user/tickets?email=${userEmail}`);
-                console.log('Received ticket URLs:', response.data);
-                setTicketUrls(response.data);
+                const response = await axios.get(`http://localhost:8080/api/tickets/tickets?email=${encodeURIComponent(userEmail)}`);
+                console.log('Received ticket paths:', response.data);
+                setTicketPaths(response.data);
             } catch (error) {
-                console.error('Failed to fetch ticket URLs:', error);
+                console.error('Failed to fetch tickets:', error);
             }
         };
 
-        if (userEmail) {
-            fetchUserTickets();
-        }
+        fetchUserTickets();
     }, [userEmail]);
+
+    console.log('User email in component:', userEmail); 
 
     return (
         <div>
             <h2>Your Tickets</h2>
-            {/* <div className="ticket-images">
-                {ticketUrls.map((url, index) => (
-                    // <iframe key={index} src={url} title={`Ticket ${index + 1}`} width="600" height="400"></iframe>
+            <div className="ticket-images">
+                {ticketPaths.map((path, index) => (
+                    <iframe
+                        key={index}
+                        src={`http://localhost:8080/${path}`}
+                        width="600"
+                        height="400"
+                        title={`Ticket ${index + 1}`}
+                    />
                 ))}
-            </div> */}
+            </div>
         </div>
     );
 };
 
 export default YourAccount;
-
-

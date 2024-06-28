@@ -12,6 +12,8 @@ import Navbar from './components/Navbar';
 import YourAccount from './components/YourAccount'; 
 import Greeting from './components/Greeting';
 import Users from './components/Users';
+import CheckTicket from './components/CheckTicket'
+import './App.css';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,6 +26,7 @@ const App = () => {
    
     const accessToken = localStorage.getItem('accessToken');
     const role = localStorage.getItem('userRole');
+    const email = localStorage.getItem('email');
     if (accessToken && role) {
       setIsLoggedIn(true);
       setUserRole(role);
@@ -42,6 +45,8 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userRole');
+
+   
     setIsLoggedIn(false);
     setUserRole('notLoggedIn');
 
@@ -76,6 +81,7 @@ const App = () => {
           <Route path="/your-account" element={<YourAccount />} /> 
           <Route path="/greeting" element={<Greeting />} />
           <Route path="/manage-users" element={<Users />} />
+          <Route path="/check-ticket" element={<CheckTicket />} />
         </Routes>
       </div>
     </Router>

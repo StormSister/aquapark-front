@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import './Navbar.css'; // Import niestandardowych stylów
 
 const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     onLogout();
     navigate('/');
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const renderNavLinks = () => {
@@ -57,22 +63,25 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-custom">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">Aquapark</Link>
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div className="menu-icon" onClick={toggleMenu}>
+          &#9776; {/* Ikona hamburgera */}
+        </div>
+        <div className={`navbar-collapse ${isMenuOpen ? 'active' : ''}`} id="navbarNav">
           <ul className="navbar-nav">
             {renderNavLinks()}
           </ul>
-          <ul className="navbar-nav ms-auto">
-            {isLoggedIn && (
+          {isLoggedIn && (
+            <ul className="navbar-nav ms-auto">
               <li className="nav-item">
                 <button className="btn btn-outline-danger" onClick={handleLogout}>
                   Logout
                 </button>
               </li>
-            )}
-          </ul>
+            </ul>
+          )}
         </div>
       </div>
     </nav>
@@ -86,9 +95,6 @@ Navbar.propTypes = {
 };
 
 export default Navbar;
-
-
-
 
 
 
