@@ -21,7 +21,7 @@ const App = () => {
   const [userRole, setUserRole] = useState('notLoggedIn');
 
   useEffect(() => {
-    // Sprawdzenie Local Storage po załadowaniu aplikacji
+   
     const accessToken = localStorage.getItem('accessToken');
     const role = localStorage.getItem('userRole');
     if (accessToken && role) {
@@ -29,11 +29,12 @@ const App = () => {
       setUserRole(role);
     }
   }, []);
-
-  // Funkcja do ustawienia zalogowanego stanu i roli
-  const handleLogin = (accessToken, role) => {
+  
+  
+  const handleLogin = (accessToken, role, userEmail) => {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('userRole', role);
+    localStorage.setItem('userEmail', userEmail);
     setIsLoggedIn(true);
     setUserRole(role);
   };
@@ -44,7 +45,7 @@ const App = () => {
     setIsLoggedIn(false);
     setUserRole('notLoggedIn');
 
-    // Call the logout endpoint
+    
     fetch('http://localhost:8080/api/logout', {
       method: 'POST',
     })

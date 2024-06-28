@@ -22,7 +22,10 @@ const Login = ({ onLogin }) => {
         throw new Error('Google login failed');
       }
       const data = await res.json();
-      onLogin(data.accessToken, data.role);
+      onLogin(data.accessToken, data.role, data.email); 
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('userRole', data.role);
+      localStorage.setItem('userEmail', data.email); 
       navigate('/');
     } catch (error) {
       console.error('Google login error:', error);
@@ -47,7 +50,10 @@ const Login = ({ onLogin }) => {
         throw new Error('Invalid credentials');
       }
       const data = await response.json();
-      onLogin(data.accessToken, data.role);
+      onLogin(data.accessToken, data.role, data.email); 
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('userRole', data.role);
+      localStorage.setItem('userEmail', data.email); 
       navigate('/');
     } catch (error) {
       console.error('Login error:', error);
