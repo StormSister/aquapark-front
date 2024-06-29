@@ -8,17 +8,19 @@ const CheckTickets = () => {
 
     const handleScan = async (data) => {
         if (data) {
-            console.log('Detected QR code:', data);
+            console.log('Detected QR code data:', data);
+            console.log('Data text:', data.text);
 
             try {
-                const response = await axios.post('http://localhost:8080/api/check-qr', { qrCode: data });
+                // Wyłącz skaner od razu po odczytaniu kodu QR
+                setScannerEnabled(false);
+
+                const response = await axios.post('http://localhost:8080/api/tickets/check-qr', { qrCode: data.text });
+                console.log('Response from server:', response);
                 setMessage(response.data);
             } catch (error) {
                 console.error('Failed to send QR code to server:', error);
                 setMessage('Failed to scan QR code. Please try again.');
-            } finally {
-                // Zawsze wyłącz skaner po skanowaniu, niezależnie od wyniku
-                setScannerEnabled(false);
             }
         }
     };
@@ -57,7 +59,6 @@ const CheckTickets = () => {
 };
 
 export default CheckTickets;
-
 
 
 
