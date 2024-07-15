@@ -1,0 +1,97 @@
+.room-card {
+    width: 300px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.room-card-content {
+    padding: 10px;
+}
+
+.room-card h3 {
+    margin-top: 0;
+}
+
+.room-card-image {
+    max-width: 300px;
+    height: 300px; /* Ustalona wysokość dla obrazu */
+    overflow: hidden; /* Ukryj nadmiarowy obraz */
+}
+
+.room-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Dopasuj obraz do wymiarów kontenera */
+}
+
+
+.room-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center; /* Wycentrowanie kart w poziomie */
+}
+
+.calendar-container {
+    max-width: 600px; /* Maksymalna szerokość kontenera kalendarza */
+    margin: 0 auto; /* Wycentrowanie kalendarza na stronie */
+    padding: 20px;
+   
+    background-color: #fff; /* Tło kalendarza */
+}
+
+.form-field { max-width: 600px; /* Maksymalna szerokość kontenera kalendarza */
+    margin: 0 auto; /* Wycentrowanie kalendarza na stronie */
+    padding: 20px;
+    border: 1px solid #ccc; /* Ramka dla kalendarza */
+    background-color: #fff; 
+
+}
+
+.react-calendar__tile {
+    padding: 0.75em;
+    background: #fff;
+    color: black;
+    text-align: center;
+    border: 1px solid #ccc; /* Ramka dla każdej komórki kalendarza */
+}
+.react-calendar__tile--today {
+    background-color: rgb(59, 119, 57); /* Zielone tło dla dzisiejszej daty */
+    color: white; /* Biały kolor czcionki dla dzisiejszej daty */
+}
+
+
+.react-calendar__tile--hover {
+    background: #eaf; /* Tło dla daty po najechaniu */
+}
+
+/* Styl dla zaznaczonych dat */
+.react-calendar__tile--selected {
+    background: #baf; /* Tło dla zaznaczonej daty */
+    color: white; /* Kolor czcionki dla zaznaczonej daty */
+}
+
+.react-calendar__tile--disabled {
+    background-color: #f2f2f22f; /* Kolor tła dla wyłączonych płytek (dat przeszłych) */
+    color: #575252; /* Kolor czcionki dla wyłączonych płytek (dat przeszłych) */
+    cursor: not-allowed; /* Kursor nieaktywny dla wyłączonych płytek (dat przeszłych) */
+}
+
+.react-calendar__navigation {
+    background-color: #61a3ac; /* Neutralny kolor tła dla navigacji kalendarza */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+}
+
+.react-calendar__navigation button {
+    background-color: #f2f2f2; /* Neutralny kolor tła dla przycisków navigacji */
+    color: #333; /* Kolor czcionki dla przycisków navigacji */
+    font-size: 20px;
+    padding: 4px 8px;
+    border: none;
+    cursor: pointer;
+}
+

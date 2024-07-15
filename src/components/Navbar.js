@@ -19,37 +19,37 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const renderNavLinks = () => {
     const navLinks = {
       notLoggedIn: [
-        { label: 'Home', path: '/' },
+        // { label: 'Home', path: '/' },
         { label: 'Login', path: '/login' },
         { label: 'Register', path: '/register' },
-        { label: 'Book a Room', path: '/book-room' },
-        { label: 'Buy Tickets', path: '/buy-tickets' },
-        { label: 'Greeting', path: '/greeting' },
+        { label: 'Rooms', path: '/book-room' },
+        { label: 'Tickets', path: '/buy-tickets' },
+        // { label: 'Greeting', path: '/greeting' },
       ],
       client: [
-        { label: 'Home', path: '/' },
-        { label: 'Book a Room', path: '/book-room' },
-        { label: 'Buy Tickets', path: '/buy-tickets' },
-        { label: 'Your Account', path: '/your-account' },
+        // { label: 'Home', path: '/' },
+        { label: 'Rooms', path: '/book-room' },
+        { label: 'Tickets', path: '/buy-tickets' },
+        { label: 'My Account', path: '/your-account' },
       ],
       worker: [
-        { label: 'Home', path: '/' },
-        { label: 'Sell Ticket', path: '/sell-ticket' },
+        // { label: 'Home', path: '/' },
+        { label: 'Sell Tickets', path: '/sell-ticket' },
         { label: 'Check Ticket', path: '/check-ticket' },
-        { label: 'Book a Room', path: '/book-room' },
+        { label: 'Reservations', path: '/book-room' },
         { label: 'Cancel Reservation', path: '/cancel-reservation' },
-        { label: 'Your Account', path: '/your-account' },
+        { label: 'My account', path: '/your-account' },
       ],
       manager: [
-        { label: 'Home', path: '/' },
-        { label: 'Sell Ticket', path: '/sell-ticket' },
+        // { label: 'Home', path: '/' },
+        { label: 'Sell Tickets', path: '/sell-ticket' },
         { label: 'Check Ticket', path: '/check-ticket' },
-        { label: 'Book a Room', path: '/book-room' },
-        { label: 'Cancel Reservation', path: '/cancel-reservation' },
-        { label: 'Change Price', path: '/change-price' },
-        { label: 'Add Promotion', path: '/add-promotion' },
-        { label: 'Your Account', path: '/your-account' },
+        { label: 'Rooms', path: '/book-room' },
+        { label: 'Reservations', path: '/cancel-reservation' },
+        { label: 'Prices', path: '/change-price' },
+        { label: 'Promotions', path: '/add-promotion' },
         { label: 'Users', path: '/manage-users' },
+        { label: 'My Account', path: '/your-account' },
       ],
     };
 
@@ -95,6 +95,7 @@ Navbar.propTypes = {
 };
 
 export default Navbar;
+
 
 
 

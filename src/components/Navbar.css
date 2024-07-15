@@ -36,6 +36,11 @@
 .navbar-links {
   display: flex;
   flex-direction: row;
+  justify-content: space-between; /* Rozsuń elementy wzdłuż osi głównej */
+}
+
+.nav-item {
+  margin-right: 10px; /* Dodaj margines po prawej stronie każdego elementu */
 }
 
 @media (max-width: 768px) {
