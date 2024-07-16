@@ -5,7 +5,7 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn }) => {
 
   useEffect(() => {
     if (user) {
-      setEditedUser({ ...user }); // Ustawiamy klon obiektu user
+      setEditedUser({ ...user });
     }
   }, [user]);
 
@@ -27,15 +27,18 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn }) => {
   };
 
   if (!user) {
-    return <div>Loading...</div>; // Można dodać inny komunikat lub loader
+    return <div>Loading...</div>; 
   }
 
   return (
     <div>
       <h2>Edit User</h2>
       <form onSubmit={handleSubmit}>
+        <label>Email:</label>
+        <input type="text" name="email" value={editedUser.email || ''} onChange={handleChange} />
+        <br />
         <label>Username:</label>
-        <input type="text" name="username" value={editedUser.username || ''} onChange={handleChange} readOnly />
+        <input type="text" name="username" value={editedUser.username || ''} onChange={handleChange} />
         <br />
         <label>First Name:</label>
         <input type="text" name="firstName" value={editedUser.firstName || ''} onChange={handleChange} />
@@ -57,5 +60,6 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn }) => {
 };
 
 export default EditUser;
+
 
 

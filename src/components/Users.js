@@ -7,6 +7,7 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchParams, setSearchParams] = useState({
+    email: '',
     username: '',
     firstName: '',
     lastName: '',
@@ -45,6 +46,7 @@ const Users = () => {
   const handleSearch = async () => {
     try {
       const query = {
+        email: searchParams.email || null,
         username: searchParams.username || null,
         firstName: searchParams.firstName || null,
         lastName: searchParams.lastName || null,
@@ -68,6 +70,7 @@ const Users = () => {
 
   const clearSearchParams = () => {
     setSearchParams({
+      email: '',
       username: '',
       firstName: '',
       lastName: '',
@@ -88,11 +91,35 @@ const Users = () => {
   };
 
   const handleUpdateUser = async (updatedUser) => {
-    try {
-      const response = await axios.put(`http://localhost:8080/api/users/${updatedUser.id}`, updatedUser);
+    try {const handleUpdateUser = async (updatedUser) => {
+      try {
+        // Usuwanie pól o wartości null lub pustej
+        const cleanedUser = Object.keys(updatedUser).reduce((acc, key) => {
+          if (updatedUser[key] !== null && updatedUser[key] !== '') {
+            acc[key] = updatedUser[key];
+          }
+          return acc;
+        }, {});
+    
+        const response = await axios.put(`http://localhost:8080/api/users/${updatedUser.id}`, cleanedUser);
+        console.log('Updated user:', response.data);
+        fetchAllUsers();
+        setSelectedUser(null); // Resetujemy wybranego użytkownika
+      } catch (error) {
+        console.error('Error updating user:', error);
+      }
+    };
+      const cleanedUser = Object.keys(updatedUser).reduce((acc, key) => {
+        if (updatedUser[key] !== null && updatedUser[key] !== '') {
+          acc[key] = updatedUser[key];
+        }
+        return acc;
+      }, {});
+  
+      const response = await axios.put(`http://localhost:8080/api/users/${updatedUser.id}`, cleanedUser);
       console.log('Updated user:', response.data);
       fetchAllUsers();
-      setSelectedUser(null); // Resetujemy wybranego użytkownika
+      setSelectedUser(null); 
     } catch (error) {
       console.error('Error updating user:', error);
     }
@@ -113,6 +140,7 @@ const Users = () => {
     <div>
       <h1>Manage Users</h1>
       <div>
+        <input type="text" name="email" value={searchParams.email} placeholder="Email" onChange={handleParamChange} />
         <input type="text" name="username" value={searchParams.username} placeholder="Username" onChange={handleParamChange} />
         <input type="text" name="firstName" value={searchParams.firstName} placeholder="First Name" onChange={handleParamChange} />
         <input type="text" name="lastName" value={searchParams.lastName} placeholder="Last Name" onChange={handleParamChange} />
@@ -139,4 +167,5 @@ const Users = () => {
 };
 
 export default Users;
+
 
