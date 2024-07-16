@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn }) => {
+const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn, onCancel }) => {
   const [editedUser, setEditedUser] = useState({});
 
   useEffect(() => {
@@ -16,14 +16,23 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userToUpdate = isLoggedIn && isLoggedIn.role === 'manager'
-      ? { ...editedUser, password: undefined }
-      : editedUser;
+    const userToUpdate = {
+      ...editedUser,
+      password: canChangePassword() ? editedUser.password : undefined,
+    };
     onUpdateUser(userToUpdate);
   };
 
   const handleDelete = () => {
     onDeleteUser(user.id);
+  };
+
+  const handleCancel = () => {
+    onCancel(); // Wywołujemy funkcję anulowania przekazaną jako props
+  };
+
+  const canChangePassword = () => {
+    return isLoggedIn && (isLoggedIn.role === 'manager' || (isLoggedIn.role !== 'manager' && editedUser.id === isLoggedIn.id));
   };
 
   if (!user) {
@@ -49,11 +58,24 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn }) => {
         <label>Phone Number:</label>
         <input type="text" name="phoneNumber" value={editedUser.phoneNumber || ''} onChange={handleChange} />
         <br />
-        <label>Role:</label>
-        <input type="text" name="role" value={editedUser.role || ''} onChange={handleChange} />
-        <br />
+        {canChangePassword() && (
+          <>
+            <label>Password:</label>
+            <input type="password" name="password" value={editedUser.password || ''} onChange={handleChange} />
+            <br />
+          </>
+        )}
+        {isLoggedIn && (isLoggedIn.role === 'worker' || isLoggedIn.role === 'client') && (
+          <>
+            <label>Role:</label>
+            <input type="text" name="role" value={editedUser.role || ''} readOnly />
+            <br />
+          </>
+        )}
         <button type="submit">Update</button>
         <button type="button" onClick={handleDelete}>Delete</button>
+        {/* Dodajemy guzik zamknięcia */}
+        <button type="button" onClick={handleCancel}>Close</button>
       </form>
     </div>
   );
