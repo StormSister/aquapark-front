@@ -13,10 +13,12 @@ import YourAccount from './components/YourAccount';
 import Greeting from './components/Greeting';
 import Users from './components/Users';
 import CheckTicket from './components/CheckTicket'
+import ReservationTable from './components/ReservationTable'
 import './App.css';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ReservationsTable from './components/ReservationTable';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -82,6 +84,7 @@ const App = () => {
           <Route path="/greeting" element={<Greeting />} />
           <Route path="/manage-users" element={<Users />} />
           <Route path="/check-ticket" element={<CheckTicket />} />
+          <Route path= "/cancel-reservation" element={<ReservationTable />} />
         </Routes>
       </div>
     </Router>
