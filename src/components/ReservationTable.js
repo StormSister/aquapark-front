@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReservationsSearch from './ReservationsSearch';
 import { Link } from 'react-router-dom';
-import AddReservationButton from './AddReservationButton'; 
-import './ReservationTable.css';
+import AddReservationButton from './AddReservationButton';
+import './ReservationTable.css'; // Import pliku CSS
 
 const ReservationsTable = () => {
     const [reservations, setReservations] = useState([]);
@@ -41,18 +41,19 @@ const ReservationsTable = () => {
 
     return (
         <div>
-            <AddReservationButton /> 
+            <AddReservationButton />
             <ReservationsSearch onSearch={handleSearch} />
             {notification && <p>{notification}</p>}
             {searchPerformed && reservations.length === 0 ? (
                 <p>No reservations found.</p>
             ) : (
-                <table>
+                <table className="reservations-table">
                     <thead>
                         <tr>
                             <th>Room Type</th>
                             <th>User Email</th>
                             <th>User Name</th>
+                            <th>Phone Number</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Actions</th>
@@ -64,6 +65,7 @@ const ReservationsTable = () => {
                                 <td>{reservation.roomType}</td>
                                 <td>{reservation.userEmail}</td>
                                 <td>{reservation.userName}</td>
+                                <td>{reservation.phoneNumber}</td>
                                 <td>{reservation.startDate}</td>
                                 <td>{reservation.endDate}</td>
                                 <td>
@@ -79,6 +81,7 @@ const ReservationsTable = () => {
 };
 
 export default ReservationsTable;
+
 
 
 

@@ -121,7 +121,7 @@ const YourAccount = () => {
                     {reservations.map((reservation) => (
                         <li key={reservation.id}>
                             <p>Reservation ID: {reservation.id}</p>
-                            <p>Room Type: {reservation.room.type}</p>
+                            <p>Room Type: {reservation.roomType}</p>
                             <p>Start Date: {reservation.startDate}</p>
                             <p>End Date: {reservation.endDate}</p>
                         </li>
