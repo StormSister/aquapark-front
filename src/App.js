@@ -12,8 +12,10 @@ import Navbar from './components/Navbar';
 import YourAccount from './components/YourAccount'; 
 import Greeting from './components/Greeting';
 import Users from './components/Users';
-import CheckTicket from './components/CheckTicket'
-import ReservationTable from './components/ReservationTable'
+import CheckTicket from './components/CheckTicket';
+import ReservationTable from './components/ReservationTable';
+import ManagePrices from './components/Prices/ManagePrices';
+
 import './App.css';
 
 
@@ -85,6 +87,8 @@ const App = () => {
           <Route path="/manage-users" element={<Users />} />
           <Route path="/check-ticket" element={<CheckTicket />} />
           <Route path= "/cancel-reservation" element={<ReservationTable />} />
+          <Route path= '/change-price' element={<ManagePrices />} />
+
         </Routes>
       </div>
     </Router>
