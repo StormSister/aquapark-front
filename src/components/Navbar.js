@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import './Navbar.css'; // Import niestandardowych stylów
+import aquaparkLogo from '../assets/images/logo/ElArenal.png'
+import './Navbar.css'; 
 
 const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,7 +66,9 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-custom">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">Aquapark</Link>
+        <Link className="navbar-brand" to="/">
+          <img src={aquaparkLogo} alt="Aquapark Logo" className="aquapark-logo" />
+        </Link>
         <div className="menu-icon" onClick={toggleMenu}>
           &#9776; {/* Ikona hamburgera */}
         </div>

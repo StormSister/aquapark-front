@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import axios from 'axios';
 import RoomCard from './RoomCard';
+import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import './Bookroom.css';
 
 const ReservationForm = () => {
@@ -12,11 +15,13 @@ const ReservationForm = () => {
     const [selectedRooms, setSelectedRooms] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
     const [showUserForm, setShowUserForm] = useState(false);
-    const [userInfo, setUserInfo] = useState({
-        email: '',
-        firstName: '',
-        lastName: '',
-        phoneNumber: ''
+    const navigate = useNavigate();
+
+    const userFormSchema = Yup.object().shape({
+        email: Yup.string().email('Invalid email').required('Required'),
+        firstName: Yup.string().required('Required'),
+        lastName: Yup.string().required('Required'),
+        phoneNumber: Yup.string().required('Required')
     });
 
     const handleDateChange = (dates) => {
@@ -69,16 +74,19 @@ const ReservationForm = () => {
             return;
         }
 
+        for (const room of selectedRoomTypes) {
+            const availableRoom = availableRooms.find(r => r.name === room.name);
+            if (room.quantity > availableRoom.availableQuantity) {
+                alert(`Cannot select more than ${availableRoom.availableQuantity} ${room.name} rooms.`);
+                return;
+            }
+        }
+
         setShowUserForm(true);
     };
 
-    const handleUserFormSubmit = async () => {
+    const handleUserFormSubmit = async (values) => {
         const selectedRoomTypes = Object.values(selectedRooms).filter(room => room.quantity > 0);
-
-        if (!userInfo.email || !userInfo.firstName || !userInfo.lastName || !userInfo.phoneNumber) {
-            alert("Please fill out all user information.");
-            return;
-        }
 
         try {
             const reservationRequests = selectedRoomTypes.map(room => ({
@@ -87,30 +95,22 @@ const ReservationForm = () => {
                 endDate: endDate.toISOString().split('T')[0],
                 numberOfPersons: room.quantity,
                 user: {
-                    email: userInfo.email,
-                    firstName: userInfo.firstName,
-                    lastName: userInfo.lastName,
-                    phoneNumber: userInfo.phoneNumber
+                    email: values.email,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    phoneNumber: values.phoneNumber
                 }
             }));
 
             await axios.post('http://localhost:8080/api/reservations', reservationRequests);
             alert('Reservation successful!');
+            navigate('/');
         } catch (error) {
             console.error('Error making reservation', error);
         }
     };
 
-    const handleUserInfoChange = (e) => {
-        const { name, value } = e.target;
-        setUserInfo(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
     const tileDisabled = ({ date, view }) => {
-        // Disable tiles before today's date
         return view === 'month' && date < new Date();
     };
 
@@ -118,7 +118,7 @@ const ReservationForm = () => {
         if (view === 'month' && date.toDateString() === new Date().toDateString()) {
             return 'react-calendar__tile--today';
         }
-        if (view === 'month' && date < new Date()-1) {
+        if (view === 'month' && date < new Date() - 1) {
             return 'react-calendar__tile--disabled';
         }
         if (view === 'month' && date >= startDate && date <= endDate) {
@@ -127,6 +127,17 @@ const ReservationForm = () => {
 
         return null;
     };
+
+    const userForm = useFormik({
+        initialValues: {
+            email: '',
+            firstName: '',
+            lastName: '',
+            phoneNumber: ''
+        },
+        validationSchema: userFormSchema,
+        onSubmit: handleUserFormSubmit
+    });
 
     return (
         <div className="create-reservation-container">
@@ -174,56 +185,73 @@ const ReservationForm = () => {
             )}
 
             {showUserForm && (
-                <div>
+                <form onSubmit={userForm.handleSubmit}>
                     <h2>User Information</h2>
                     <div className="form-field">
                         <label>Email:</label>
                         <input
                             type="email"
                             name="email"
-                            value={userInfo.email}
-                            onChange={handleUserInfoChange}
+                            value={userForm.values.email}
+                            onChange={userForm.handleChange}
+                            onBlur={userForm.handleBlur}
                             className="form-input"
                         />
+                        {userForm.touched.email && userForm.errors.email ? (
+                            <div className="error">{userForm.errors.email}</div>
+                        ) : null}
                     </div>
                     <div className="form-field">
                         <label>First Name:</label>
                         <input
                             type="text"
                             name="firstName"
-                            value={userInfo.firstName}
-                            onChange={handleUserInfoChange}
+                            value={userForm.values.firstName}
+                            onChange={userForm.handleChange}
+                            onBlur={userForm.handleBlur}
                             className="form-input"
                         />
+                        {userForm.touched.firstName && userForm.errors.firstName ? (
+                            <div className="error">{userForm.errors.firstName}</div>
+                        ) : null}
                     </div>
                     <div className="form-field">
                         <label>Last Name:</label>
                         <input
                             type="text"
                             name="lastName"
-                            value={userInfo.lastName}
-                            onChange={handleUserInfoChange}
+                            value={userForm.values.lastName}
+                            onChange={userForm.handleChange}
+                            onBlur={userForm.handleBlur}
                             className="form-input"
                         />
+                        {userForm.touched.lastName && userForm.errors.lastName ? (
+                            <div className="error">{userForm.errors.lastName}</div>
+                        ) : null}
                     </div>
                     <div className="form-field">
                         <label>Phone Number:</label>
                         <input
                             type="tel"
                             name="phoneNumber"
-                            value={userInfo.phoneNumber}
-                            onChange={handleUserInfoChange}
+                            value={userForm.values.phoneNumber}
+                            onChange={userForm.handleChange}
+                            onBlur={userForm.handleBlur}
                             className="form-input"
                         />
+                        {userForm.touched.phoneNumber && userForm.errors.phoneNumber ? (
+                            <div className="error">{userForm.errors.phoneNumber}</div>
+                        ) : null}
                     </div>
-                    <button onClick={handleUserFormSubmit}>Confirm</button>
-                </div>
+                    <button type="submit">Confirm</button>
+                </form>
             )}
         </div>
     );
 };
 
 export default ReservationForm;
+
 
 
 

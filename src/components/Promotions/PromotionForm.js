@@ -12,7 +12,6 @@ const PromotionForm = ({ onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Ensure both dates are valid
         if (!startDate || !endDate) {
             alert('Please provide both start and end dates.');
             return;
@@ -24,6 +23,7 @@ const PromotionForm = ({ onClose }) => {
         formData.append('discountType', discountType);
         formData.append('discountAmount', discountAmount);
         formData.append('description', description);
+        console.log(formData);
 
         if (image) {
             formData.append('image', image);
@@ -35,13 +35,14 @@ const PromotionForm = ({ onClose }) => {
         }
 
         try {
-            await axios.post('http://localhost:8080/api/promotions/add', formData, {
+            const response = await axios.post('http://localhost:8080/api/promotions/add', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            console.log('Response from server:', response.data);
             alert('Promocja została dodana!');
-            onClose(); // Zamknięcie formularza po dodaniu promocji
+            onClose();
         } catch (error) {
             console.error('Błąd podczas dodawania promocji:', error);
             alert('Wystąpił błąd podczas dodawania promocji!');
@@ -106,5 +107,4 @@ const PromotionForm = ({ onClose }) => {
 };
 
 export default PromotionForm;
-
 

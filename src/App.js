@@ -15,6 +15,7 @@ import Users from './components/Users';
 import CheckTicket from './components/CheckTicket';
 import ReservationTable from './components/ReservationTable';
 import ManagePrices from './components/Prices/ManagePrices';
+import PromotionManager from './components/Promotions/PromotionManager';
 
 import './App.css';
 
@@ -88,6 +89,7 @@ const App = () => {
           <Route path="/check-ticket" element={<CheckTicket />} />
           <Route path= "/cancel-reservation" element={<ReservationTable />} />
           <Route path= '/change-price' element={<ManagePrices />} />
+          <Route path= '/add-promotion' element={<PromotionManager />} />
 
         </Routes>
       </div>

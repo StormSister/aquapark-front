@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import PromotionBanner from './Promotions/PromotionBanner';
 
 const attractions = [
   { id: 1, name: 'Wave Pool', description: 'Enjoy our giant wave pool!' },
@@ -7,6 +9,23 @@ const attractions = [
 ];
 
 const Home = () => {
+  const [hasCurrentPromotion, setHasCurrentPromotion] = useState(false);
+
+  useEffect(() => {
+    checkForCurrentPromotion();
+  }, []);
+
+  const checkForCurrentPromotion = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/promotions/current');
+      if (response.data) {
+        setHasCurrentPromotion(true);
+      }
+    } catch (error) {
+      console.error('Error checking for current promotion:', error);
+    }
+  };
+
   return (
     <div className="container mt-4">
       <h2>Welcome to Aquapark</h2>
@@ -21,6 +40,9 @@ const Home = () => {
           </li>
         ))}
       </ul>
+
+      {/* Display PromotionBanner if there is a current promotion */}
+      {hasCurrentPromotion && <PromotionBanner />}
     </div>
   );
 };
