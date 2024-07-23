@@ -10,7 +10,7 @@
 }
 
 .navbar-custom .nav-link {
-  color: white; /* Białe litery */
+  color: rgb(241, 150, 13); /* Białe litery */
 }
 
 .navbar-custom .nav-link:hover {
@@ -19,7 +19,7 @@
 }
 
 .navbar-custom .navbar-brand {
-  color: white; /* Biała marka */
+  color: rgb(255, 255, 255); /* Biała marka */
 }
 
 .navbar-custom .navbar-brand:hover {

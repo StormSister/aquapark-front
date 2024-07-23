@@ -1,7 +1,5 @@
-
-
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const EditUser = ({ user, onSave }) => {
   const [updatedUser, setUpdatedUser] = useState({ ...user });
@@ -14,11 +12,14 @@ const EditUser = ({ user, onSave }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/update', updatedUser);
-      console.log('User updated successfully:', response.data);
+      const response = await axios.post(
+        "http://localhost:8080/api/update",
+        updatedUser
+      );
+      console.log("User updated successfully:", response.data);
       onSave(response.data);
     } catch (error) {
-      console.error('Error updating user:', error);
+      console.error("Error updating user:", error);
     }
   };
 
@@ -28,11 +29,21 @@ const EditUser = ({ user, onSave }) => {
       <form onSubmit={handleSubmit}>
         <label>
           Username:
-          <input type="text" name="username" value={updatedUser.username} onChange={handleChange} />
+          <input
+            type="text"
+            name="username"
+            value={updatedUser.username}
+            onChange={handleChange}
+          />
         </label>
         <label>
           Email:
-          <input type="email" name="email" value={updatedUser.email} onChange={handleChange} />
+          <input
+            type="email"
+            name="email"
+            value={updatedUser.email}
+            onChange={handleChange}
+          />
         </label>
         <button type="submit">Save Changes</button>
       </form>

@@ -20,7 +20,7 @@ import './App.css';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ReservationsTable from './components/ReservationTable';
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
