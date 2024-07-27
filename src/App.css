@@ -2,8 +2,9 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-image: url("./images/carousel/background_image.png");
+  background-repeat: repeat;
 }
-
 
 @media (max-width: 768px) {
   .navbar {
@@ -27,9 +28,6 @@ body {
   }
 }
 
-
-
-
 /* Dodajemy styl dla rozwiniętego menu na małych ekranach */
 .navbar-links.active {
   display: block;
@@ -46,7 +44,9 @@ form {
 }
 
 /* Stylizacja pól formularza */
-input, select, textarea {
+input,
+select,
+textarea {
   width: 100%;
   padding: 10px;
   margin: 5px 0 15px;
@@ -60,7 +60,7 @@ input, select, textarea {
 /* Stylizacja przycisków */
 button {
   width: 100%;
-  background-color: #007BFF; /* Niebieski */
+  background-color: #007bff; /* Niebieski */
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -75,19 +75,22 @@ button:hover {
 
 @media screen and (max-width: 600px) {
   form {
-      padding: 10px;
-      border: none;
+    padding: 10px;
+    border: none;
   }
 
-  input, select, textarea, button {
-      font-size: 16px;
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
   }
 
   /* Przesunięcie wiadomości błędów pod pola formularza */
   .error-message {
-      font-size: 14px;
-      color: red;
-      margin-top: -10px;
-      margin-bottom: 10px;
+    font-size: 14px;
+    color: red;
+    margin-top: -10px;
+    margin-bottom: 10px;
   }
 }

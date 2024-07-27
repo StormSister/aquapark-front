@@ -1,5 +1,5 @@
 import React from "react";
-import image1 from "../assets/images/1.webp";
+import image1 from "../images/carousel/1.webp";
 
 const attractions = [
   { id: 1, name: "Wave Pool", description: "Enjoy our giant wave pool!" },

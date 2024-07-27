@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Navbar.css"; // Import niestandardowych stylów
-import logo from "../assets/images/logo/ElArenal.svg";
+import logo from "../images/logo/ElArenal.svg";
 
 const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
