@@ -10,7 +10,7 @@
 }
 
 .navbar-custom .nav-link {
-  color: rgb(10, 10, 10); /* Białe litery */
+  color: rgb(10, 10, 10);
   border-radius: 8px;
   transition: background-color 0.3s, color 0.3s, border-radius 0.01s;
   cursor: pointer;
@@ -22,12 +22,14 @@
   border-radius: 8px;
 }
 
-.navbar-custom .navbar-brand {
-  color: rgb(255, 255, 255); /* Biała marka */
+.navbar-brand .logo {
+  height: 100px;
+  transition: transform 0.3s, height 0.3s;
 }
 
-.navbar-custom .navbar-brand:hover {
-  color: white; /* Biała marka przy najechaniu */
+.navbar-brand .logo:hover {
+  transform: scale (1.1);
+  height: 110px;
 }
 
 .menu-icon {

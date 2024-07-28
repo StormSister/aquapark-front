@@ -69,7 +69,7 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
     <nav className="navbar navbar-expand-lg navbar-custom">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          <img src={logo} alt="Aquapark" style={{ height: "50px" }} />
+          <img src={logo} alt="Aquapark" className="logo"/>
         </Link>
         <div className="menu-icon" onClick={toggleMenu}>
           &#9776; {/* Ikona hamburgera */}
