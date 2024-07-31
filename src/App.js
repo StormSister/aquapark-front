@@ -15,8 +15,6 @@ import Users from "./components/Users";
 import CheckTicket from "./components/CheckTicket";
 import ReservationTable from "./components/ReservationTable";
 import ManagePrices from "./components/Prices/ManagePrices";
-import image1 from "./images/carousel/vive_la_experiencia.png";
-
 import "./App.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -24,8 +22,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("notLoggedIn");
-
-  const imagePath = image1;
 
   const attractionsData = [
     { id: 1, name: "Wave Pool", description: "Enjoy our giant wave pool!" },
@@ -85,10 +81,7 @@ const App = () => {
           onLogout={handleLogout}
         />
         <Routes>
-          <Route
-            path="/"
-            element={<Home image1={imagePath} attractions={attractionsData} />}
-          />
+          <Route path="/" element={<Home attractions={attractionsData} />} />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/buy-tickets" element={<BuyTickets />} />

@@ -5,7 +5,7 @@ import RoomCard from './RoomCard';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import './Bookroom.css';
+import './styles/Bookroom.css';
 
 const ReservationForm = () => {
     const [startDate, setStartDate] = useState(new Date());

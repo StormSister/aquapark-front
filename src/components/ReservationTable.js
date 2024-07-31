@@ -3,7 +3,7 @@ import axios from 'axios';
 import ReservationsSearch from './ReservationsSearch';
 import { Link } from 'react-router-dom';
 import AddReservationButton from './AddReservationButton';
-import './ReservationTable.css'; // Import pliku CSS
+import './styles/ReservationTable.css'; // Import pliku CSS
 
 const ReservationsTable = () => {
     const [reservations, setReservations] = useState([]);

@@ -1,11 +1,14 @@
 import React from "react";
-import "./Home.css";
+import Carousel from "./Carousel";
+import { data } from "./imgsForCarousel";
+import "./styles/Home.css";
 
-const Home = ({ image1, attractions }) => {
+const Home = ({ attractions }) => {
   return (
     <div>
       <div className="carousel">
-        <img src={image1} className="img" alt="Aquapark" />
+        {/* Carousel */}
+        <Carousel images={data} />
       </div>
       <section className="attractions-section">
         <div className="attractions">

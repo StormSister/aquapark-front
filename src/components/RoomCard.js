@@ -24,7 +24,9 @@ const RoomCard = ({ roomType, handleRoomQuantityChange }) => {
         <p>Beds: {beds}</p>
         <p>Description: {description}</p>
         <div className="room-card-image">
-          {imagePath && <img src={`/images/rooms/${imagePath}`} alt={name} />}
+          {imagePath && (
+            <img src={`../assets/images/rooms/${imagePath}`} alt={name} />
+          )}
         </div>
         <p>Price: ${price}</p>
         <p>Available: {availableCount}</p>

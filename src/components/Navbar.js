@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import "./Navbar.css"; // Import niestandardowych stylów
-import logo from "../images/logo/ElArenal.svg";
+import "./styles/Navbar.css";
 
 const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -16,6 +17,26 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
 
   const renderNavLinks = () => {
     const navLinks = {
@@ -66,10 +87,18 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-custom">
+    <nav
+      className={`navbar navbar-expand-lg navbar-custom ${
+        isVisible ? "visible" : "hidden"
+      }`}
+    >
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          <img src={logo} alt="Aquapark" className="logo"/>
+          <img
+            src={"../assets/images/logo/ElArenal.svg"}
+            alt="Aquapark"
+            className="logo"
+          />
         </Link>
         <div className="menu-icon" onClick={toggleMenu}>
           &#9776; {/* Ikona hamburgera */}

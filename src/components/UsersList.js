@@ -1,5 +1,5 @@
 import React from 'react';
-import './UsersList.css';
+import './styles/UsersList.css';
 
 
 const UsersList = ({ users, onUserSelect }) => {

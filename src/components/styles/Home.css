@@ -1,0 +1,14 @@
+.img {
+  width: 400px;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  overflow: hidden;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  background-color: var(--bgColor);
+}

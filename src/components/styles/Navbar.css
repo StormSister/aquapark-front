@@ -1,0 +1,130 @@
+.container-fluid {
+  width: 100%;
+  padding: 0 20px;
+}
+
+/* Navbar Styles */
+.navbar-custom {
+  background-color: transparent;
+  width: 100%;
+  padding: 10px 0;
+  margin-bottom: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  border-radius: 8px;
+  transition: top 0.3s;
+}
+
+.navbar-custom.hidden {
+  top: -100px;
+}
+
+.navbar-custom.visible {
+  top: 0;
+}
+
+.navbar-custom .nav-link {
+  color: rgb(233, 171, 0);
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s, border-radius 0.01s;
+  cursor: pointer;
+}
+
+.navbar-custom .nav-link:hover {
+  background-color: #f3b304;
+  color: white;
+  border-radius: 8px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand .logo {
+  height: 60px;
+  transition: transform 0.3s, height 0.3s;
+}
+
+.navbar-brand .logo:hover {
+  transform: scale (1.1);
+  height: 80px;
+}
+
+.menu-icon {
+  display: none; /* Hide hamburger icon by default */
+  cursor: pointer;
+  font-size: 24px;
+  color: white;
+}
+
+/* Navbar Links */
+.navbar-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.nav-item {
+  margin-right: 20px;
+}
+
+.nav-link {
+  color: rgb(243, 13, 13);
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: #ddd;
+  cursor: pointer;
+}
+
+/* Right aligned links */
+.ms-auto {
+  margin-left: auto;
+}
+
+.btn-outline-danger {
+  color: white;
+  border: 1px solid white;
+  background: none;
+  padding: 5px 10px;
+}
+
+.btn-outline-danger:hover {
+  background-color: red;
+  border-color: red;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar-nav {
+    display: none; /* Hide menu by default on small screens */
+    flex-direction: column;
+    background-color: #333;
+    position: absolute;
+    top: 50px; /* Adjust according to navbar height */
+    left: 0;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  .navbar-collapse.active .navbar-nav {
+    display: flex; /* Show menu when active */
+  }
+
+  .menu-icon {
+    display: block; /* Show hamburger icon on small screens */
+  }
+
+  .nav-item {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
