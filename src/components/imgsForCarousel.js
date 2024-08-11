@@ -8,6 +8,10 @@ export const data = [
     title: "image2",
   },
   {
+    image: "../assets/images/carousel/1.webp",
+    title: "image2",
+  },
+  {
     image: "../assets/images/carousel/5.webp",
     title: "image3",
   },

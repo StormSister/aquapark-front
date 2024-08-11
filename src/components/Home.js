@@ -1,13 +1,13 @@
 import React from "react";
 import Carousel from "./Carousel";
 import { data } from "./imgsForCarousel";
+import { attraction } from "./AttractionsData";
 import "./styles/Home.css";
 
 const Home = ({ attractions }) => {
   return (
     <div>
       <div className="carousel">
-        {/* Carousel */}
         <Carousel images={data} />
       </div>
       <section className="attractions-section">

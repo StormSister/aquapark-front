@@ -15,6 +15,7 @@ import Users from "./components/Users";
 import CheckTicket from "./components/CheckTicket";
 import ReservationTable from "./components/ReservationTable";
 import ManagePrices from "./components/Prices/ManagePrices";
+
 import "./App.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -22,16 +23,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("notLoggedIn");
-
-  const attractionsData = [
-    { id: 1, name: "Wave Pool", description: "Enjoy our giant wave pool!" },
-    {
-      id: 2,
-      name: "Water Slides",
-      description: "Experience thrilling water slides!",
-    },
-    { id: 3, name: "Lazy River", description: "Relax on our lazy river!" },
-  ];
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
