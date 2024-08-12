@@ -41,21 +41,15 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const renderNavLinks = () => {
     const navLinks = {
       notLoggedIn: [
-        // { label: 'Home', path: '/' },
-        { label: "Login", path: "/login" },
-        { label: "Register", path: "/register" },
         { label: "Rooms", path: "/book-room" },
         { label: "Tickets", path: "/buy-tickets" },
-        // { label: 'Greeting', path: '/greeting' },
       ],
       client: [
-        // { label: 'Home', path: '/' },
         { label: "Rooms", path: "/book-room" },
         { label: "Tickets", path: "/buy-tickets" },
         { label: "My Account", path: "/your-account" },
       ],
       worker: [
-        // { label: 'Home', path: '/' },
         { label: "Sell Tickets", path: "/sell-ticket" },
         { label: "Check Ticket", path: "/check-ticket" },
         { label: "Reservations", path: "/book-room" },
@@ -63,7 +57,6 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
         { label: "My account", path: "/your-account" },
       ],
       manager: [
-        // { label: 'Home', path: '/' },
         { label: "Sell Tickets", path: "/sell-ticket" },
         { label: "Check Ticket", path: "/check-ticket" },
         { label: "Rooms", path: "/book-room" },
@@ -107,19 +100,24 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
           className={`navbar-collapse ${isMenuOpen ? "active" : ""}`}
           id="navbarNav"
         >
-          <ul className="navbar-nav">{renderNavLinks()}</ul>
-          {isLoggedIn && (
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item">
-                <button
-                  className="btn-outline-danger"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </li>
-            </ul>
-          )}
+          <div className="navbar-nav-left">
+            <ul className="navbar-nav">{renderNavLinks()}</ul>
+          </div>
+          <div className="navbar-nav-right">
+            {!isLoggedIn ? (
+              <>
+                <Link className="nav-link" to="/login">Login</Link>
+                <Link className="nav-link" to="/register">Register</Link>
+              </>
+            ) : (
+              <button
+                className="btn-outline-danger"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </nav>

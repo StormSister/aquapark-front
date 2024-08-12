@@ -1,3 +1,4 @@
+/* Container settings */
 .container-fluid {
   width: 100%;
   padding: 0 20px;
@@ -49,7 +50,7 @@
 }
 
 .navbar-brand .logo:hover {
-  transform: scale (1.1);
+  transform: scale(1.1);
   height: 80px;
 }
 
@@ -60,7 +61,7 @@
   color: white;
 }
 
-
+/* Navigation items */
 .navbar-nav {
   list-style: none;
   margin: 0;
@@ -85,11 +86,27 @@
   cursor: pointer;
 }
 
-
-.ms-auto {
-  margin-left: auto;
+/* Navbar sections */
+.navbar-nav-left {
+  display: flex;
+  flex: 1;
 }
 
+.navbar-nav-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Pushes the right section to the far right */
+}
+
+.navbar-nav-right .nav-link {
+  margin-left: 20px; /* Spacing between right-side items */
+}
+
+.navbar-nav-right .btn-outline-danger {
+  margin-left: 20px; /* Spacing between logout button and other items */
+}
+
+/* Button styles */
 .btn-outline-danger {
   color: rgb(250, 73, 3);
   border: 1px solid white;
@@ -104,6 +121,24 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .navbar-nav-left {
+    display: none; /* Hide left-side links on small screens */
+  }
+
+  .navbar-nav-right {
+    flex-direction: column; /* Stack right-side links vertically */
+    align-items: center;
+    margin-left: 0;
+  }
+
+  .navbar-nav-right .nav-link {
+    margin-left: 0; /* Remove margin for stacked links */
+  }
+  
+  .navbar-nav-right .btn-outline-danger {
+    margin-left: 0; /* Remove margin for stacked logout button */
+  }
+
   .navbar-nav {
     display: none; /* Hide menu by default on small screens */
     flex-direction: column;
