@@ -74,7 +74,6 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn, onCancel }) =>
         )}
         <button type="submit">Update</button>
         <button type="button" onClick={handleDelete}>Delete</button>
-        {/* Dodajemy guzik zamknięcia */}
         <button type="button" onClick={handleCancel}>Close</button>
       </form>
     </div>

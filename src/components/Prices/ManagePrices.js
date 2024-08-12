@@ -3,16 +3,26 @@ import axios from 'axios';
 import EditPriceForm from './EditPriceForm';
 import DeletePriceButton from './DeletePriceButton';
 import AddPriceForm from './AddPriceForm';
-import './ManagePrices.css'; // Import CSS file for styling
+import './ManagePrices.css'; 
 
 const ManagePrices = () => {
   const [prices, setPrices] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
 
+  const getAuthToken = () => {
+    return localStorage.getItem('accessToken'); // Pobieranie tokena z localStorage
+  };
+
   const fetchPrices = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/prices');
+      const token = getAuthToken(); // Pobieranie tokena
+      const response = await axios.get('http://localhost:8080/api/prices', {
+        headers: {
+          'Authorization': `${token}`,  // Dodanie tokena do nagłówka
+          'Content-Type': 'application/json'
+        }
+      });
       setPrices(response.data);
     } catch (error) {
       console.error('Error fetching prices:', error);
@@ -20,30 +30,21 @@ const ManagePrices = () => {
   };
 
   useEffect(() => {
-    fetchPrices();
+    fetchPrices(); // Pobieranie cen przy pierwszym załadowaniu komponentu
   }, []);
 
   const handleEditPrice = (price) => {
-    setSelectedPrice(price);
-  };
-
-  const handleDeletePrice = async (priceId) => {
-    try {
-      await axios.delete(`http://localhost:8080/api/prices/${priceId}`);
-      fetchPrices();
-    } catch (error) {
-      console.error('Error deleting price:', error);
-    }
+    setSelectedPrice(price); // Ustawienie wybranej ceny do edycji
   };
 
   const handleAddPrice = () => {
-    setShowAddForm(true);
+    setShowAddForm(true); // Wyświetlenie formularza dodawania ceny
   };
 
   const handleCloseForm = () => {
-    setSelectedPrice(null);
-    setShowAddForm(false);
-    fetchPrices();
+    setSelectedPrice(null); // Czyszczenie wybranej ceny
+    setShowAddForm(false); // Ukrycie formularza dodawania ceny
+    fetchPrices(); // Odświeżenie listy cen po zamknięciu formularza
   };
 
   return (
@@ -71,7 +72,7 @@ const ManagePrices = () => {
                   <button className="edit-button" onClick={() => handleEditPrice(price)}>
                     Edit
                   </button>
-                  <DeletePriceButton priceId={price.id} onDelete={() => handleDeletePrice(price.id)} />
+                  <DeletePriceButton priceId={price.id} onDelete={fetchPrices} />
                 </div>
               </td>
             </tr>
@@ -79,9 +80,11 @@ const ManagePrices = () => {
         </tbody>
       </table>
 
+      {/* Formularz edycji ceny */}
       {selectedPrice && <EditPriceForm price={selectedPrice} onClose={handleCloseForm} />}
 
-      {showAddForm && <AddPriceForm onClose={handleCloseForm} />}
+      {/* Formularz dodawania nowej ceny */}
+      {showAddForm && <AddPriceForm onClose={handleCloseForm} onAdd={fetchPrices} />} 
 
       <button onClick={handleAddPrice}>Add New Price</button>
     </div>
@@ -89,7 +92,6 @@ const ManagePrices = () => {
 };
 
 export default ManagePrices;
-
 
 
 

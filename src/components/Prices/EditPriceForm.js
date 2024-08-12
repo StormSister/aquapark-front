@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+
+
 const EditPriceForm = ({ price, onClose }) => {
   const [type, setType] = useState(price.type);
   const [category, setCategory] = useState(price.category);
   const [editedPrice, setEditedPrice] = useState(price.price);
+
+
+  const token = localStorage.getItem('accessToken');
+
+
+  const getHeaders = () => ({
+    headers: {
+      'Authorization': token, 
+      'Content-Type': 'application/json'
+    }
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +28,7 @@ const EditPriceForm = ({ price, onClose }) => {
         price: parseFloat(editedPrice) 
       };
 
-      const response = await axios.put(`http://localhost:8080/api/prices/update/${price.id}`, updatedData);
+      const response = await axios.put(`http://localhost:8080/api/prices/update/${price.id}`, getHeaders(), updatedData);
       console.log('Price updated successfully:', response.data);
       
       onClose(); // Zamknięcie formularza po pomyślnym zaktualizowaniu ceny

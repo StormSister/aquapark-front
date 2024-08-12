@@ -6,32 +6,41 @@ const YourAccount = () => {
     const [reservations, setReservations] = useState([]);
     const [showReservations, setShowReservations] = useState(false);
     const [userData, setUserData] = useState(null); // Stan przechowujący dane użytkownika
-    const [editProfileClicked, setEditProfileClicked] = useState(false); // Stan do śledzenia czy kliknięto "Edit Profile"
     const [editFormVisible, setEditFormVisible] = useState(false); // Stan do śledzenia czy formularz edycji jest widoczny
     const userEmail = localStorage.getItem('userEmail');
+    const token = localStorage.getItem('accessToken'); // Pobieramy token z localStorage
 
-    // Efekt do pobrania danych użytkownika po załadowaniu komponentu
     useEffect(() => {
         if (userEmail) {
             fetchUserData();
         }
     }, [userEmail]);
 
-    // Funkcja do pobrania danych użytkownika
+    const getHeaders = () => ({
+        headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json'
+        }
+    });
+
     const fetchUserData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/users/search?email=${encodeURIComponent(userEmail)}`);
+            console.log(userEmail);
+            const response = await axios.get(`http://localhost:8080/api/users/search?email=${encodeURIComponent(userEmail)}`, getHeaders());
             console.log('Received user data:', response.data);
-            setUserData(response.data); // Ustawiamy dane użytkownika w stanie
+            if (response.data) {
+                setUserData(response.data); // Ustawiamy dane użytkownika
+            } else {
+                setUserData(null); // Jeśli brak danych, ustawiamy na null
+            }
         } catch (error) {
             console.error('Failed to fetch user data:', error);
         }
     };
 
-    // Funkcja do obsługi aktualizacji użytkownika
     const updateUser = async (updatedUser) => {
         try {
-            const response = await axios.put(`http://localhost:8080/api/users/${userData.id}`, updatedUser);
+            const response = await axios.put(`http://localhost:8080/api/users/${userData.id}`, updatedUser, getHeaders());
             console.log('Updated user:', response.data);
             setUserData(response.data); // Aktualizujemy dane użytkownika po udanej aktualizacji
             setEditFormVisible(false); // Ukrywamy formularz po udanej aktualizacji
@@ -40,10 +49,9 @@ const YourAccount = () => {
         }
     };
 
-    // Funkcja do obsługi usunięcia użytkownika
     const deleteUser = async (userId) => {
         try {
-            await axios.delete(`http://localhost:8080/api/users/${userId}`);
+            await axios.delete(`http://localhost:8080/api/users/${userId}`, getHeaders());
             console.log('Deleted user with ID:', userId);
             localStorage.removeItem('userEmail'); // Usuwamy email użytkownika z localStorage
             setUserData(null); // Czyścimy dane użytkownika w stanie
@@ -53,7 +61,6 @@ const YourAccount = () => {
         }
     };
 
-    // Funkcja do przełączania widoczności rezerwacji
     const toggleReservations = () => {
         if (showReservations) {
             setShowReservations(false);
@@ -62,10 +69,9 @@ const YourAccount = () => {
         }
     };
 
-    // Funkcja do pobrania rezerwacji użytkownika
     const fetchUserReservations = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/reservations/user?email=${encodeURIComponent(userEmail)}`);
+            const response = await axios.get(`http://localhost:8080/reservations/api/user?email=${encodeURIComponent(userEmail)}`, getHeaders());
             console.log('Received reservations:', response.data);
             setReservations(response.data);
             setShowReservations(true);
@@ -74,22 +80,19 @@ const YourAccount = () => {
         }
     };
 
-    // Funkcja do obsługi kliknięcia guzika "Edit Profile"
     const handleEditProfile = () => {
-        fetchUserData(); // Pobieramy dane użytkownika
-        setEditProfileClicked(true); // Ustawiamy stan na true, że kliknięto "Edit Profile"
-        setEditFormVisible(true); // Pokazujemy formularz edycji
+        fetchUserData(); 
+        setEditFormVisible(true);
     };
 
-    // Funkcja do obsługi anulowania edycji
     const cancelEdit = () => {
-        setEditFormVisible(false); // Ukrywamy formularz edycji
-        setEditProfileClicked(false); // Resetujemy stan kliknięcia "Edit Profile"
+        setEditFormVisible(false); 
     };
 
     return (
         <div>
-            {(userData && !editFormVisible) && ( // Renderujemy tylko gdy są dane użytkownika i formularz edycji nie jest widoczny
+            {/* Renderujemy tylko gdy są dane użytkownika */}
+            {userData && !editFormVisible && (
                 <div>
                     <h2>Your Account</h2>
                     <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
@@ -103,20 +106,23 @@ const YourAccount = () => {
                     <button onClick={handleEditProfile}>Edit Profile</button> {/* Guzik "Edit Profile" */}
                 </div>
             )}
-            {editFormVisible && (
-            <EditUser
-            user={userData}
-            onUpdateUser={updateUser}
-            onDeleteUser={deleteUser}
-            isLoggedIn={userData}
-            onCancel={cancelEdit} // Przekazujemy funkcję anulowania edycji do EditUser
-  />
-)}
+
+            {/* Renderujemy formularz edycji gdy widoczny */}
+            {editFormVisible && userData && (
+                <EditUser
+                    user={userData}
+                    onUpdateUser={updateUser}
+                    onDeleteUser={deleteUser}
+                    isLoggedIn={!!userData}
+                    onCancel={cancelEdit} 
+                />
+            )}
+
             <h2>Your Reservations</h2>
             <button onClick={toggleReservations}>
                 {showReservations ? 'Hide Reservations' : 'Fetch Reservations'}
             </button>
-            {showReservations && (
+            {showReservations && reservations.length > 0 && (
                 <ul>
                     {reservations.map((reservation) => (
                         <li key={reservation.id}>
@@ -127,6 +133,9 @@ const YourAccount = () => {
                         </li>
                     ))}
                 </ul>
+            )}
+            {showReservations && reservations.length === 0 && (
+                <p>No reservations found.</p>
             )}
         </div>
     );

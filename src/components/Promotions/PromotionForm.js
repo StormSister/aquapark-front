@@ -25,6 +25,15 @@ const PromotionForm = ({ onClose }) => {
         formData.append('description', description);
         console.log(formData);
 
+        const token = localStorage.getItem('accessToken');
+
+const getHeaders = () => ({
+    headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+    }
+});
+
         if (image) {
             formData.append('image', image);
         }
@@ -35,7 +44,7 @@ const PromotionForm = ({ onClose }) => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/api/promotions/add', formData, {
+            const response = await axios.post('http://localhost:8080/promotions/api/add', getHeaders(), formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

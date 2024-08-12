@@ -15,7 +15,7 @@ const CheckTickets = () => {
                 // Wyłącz skaner od razu po odczytaniu kodu QR
                 setScannerEnabled(false);
 
-                const response = await axios.post('http://localhost:8080/api/tickets/check-qr', { qrCode: data.text });
+                const response = await axios.post('http://localhost:8080/tickets/api/check-qr', { qrCode: data.text });
                 console.log('Response from server:', response);
                 setMessage(response.data);
             } catch (error) {

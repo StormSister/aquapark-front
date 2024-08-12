@@ -3,6 +3,8 @@ import axios from 'axios';
 import UsersList from './UsersList';
 import EditUser from './EditUser';
 
+const token = localStorage.getItem('accessToken');
+
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -24,19 +26,31 @@ const Users = () => {
   }, [loadedAllUsers]);
 
   useEffect(() => {
-    fetchAllUsers(); // Pobieramy użytkowników na starcie
+    fetchAllUsers(); 
   }, []);
 
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/users');
-      console.log('Fetched all users:', response.data);
+     
+      const token = localStorage.getItem('accessToken');
+      console.log('Token used for request:', token);
+  
+      
+      const response = await axios.get('http://localhost:8080/api/users', {
+        headers: {
+          'Authorization': `${token}`, 
+          'Content-Type': 'application/json'
+        }
+        
+      });
+  
+      console.log('Fetched all users:', response.data); // Log response data
       setUsers(response.data);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error fetching users:', error); // Log error
+      console.log('Error details:', error.response ? error.response.data : error.message); // Log more details
     }
   };
-
   const handleShowAllUsers = () => {
     setFilteredUsers([]);
     setLoadedAllUsers(true);
@@ -46,15 +60,27 @@ const Users = () => {
   const handleSearch = async () => {
     try {
       const query = {
-        email: searchParams.email || null,
-        username: searchParams.username || null,
-        firstName: searchParams.firstName || null,
-        lastName: searchParams.lastName || null,
-        phoneNumber: searchParams.phoneNumber || null,
-        role: searchParams.role || null
+        email: searchParams.email || undefined,
+        username: searchParams.username || undefined,
+        firstName: searchParams.firstName || undefined,
+        lastName: searchParams.lastName || undefined,
+        phoneNumber: searchParams.phoneNumber || undefined,
+        role: searchParams.role || undefined
       };
-
-      const response = await axios.get(`http://localhost:8080/api/search`, { params: query });
+  
+      // Remove undefined values from query
+      const filteredQuery = Object.fromEntries(
+        Object.entries(query).filter(([_, v]) => v !== undefined)
+      );
+  
+      const response = await axios.get(`http://localhost:8080/api/search`, {
+        headers: {
+          'Authorization': `${token}`, 
+          'Content-Type': 'application/json'
+        },
+        params: filteredQuery
+      });
+  
       console.log('Search results:', response.data);
       setFilteredUsers(response.data);
       setLoadedAllUsers(false);
@@ -104,7 +130,7 @@ const Users = () => {
         const response = await axios.put(`http://localhost:8080/api/users/${updatedUser.id}`, cleanedUser);
         console.log('Updated user:', response.data);
         fetchAllUsers();
-        setSelectedUser(null); // Resetujemy wybranego użytkownika
+        setSelectedUser(null); 
       } catch (error) {
         console.error('Error updating user:', error);
       }
@@ -130,7 +156,7 @@ const Users = () => {
       await axios.delete(`http://localhost:8080/api/users/${userId}`);
       console.log('Deleted user with ID:', userId);
       fetchAllUsers();
-      setSelectedUser(null); // Resetujemy wybranego użytkownika
+      setSelectedUser(null); 
     } catch (error) {
       console.error('Error deleting user:', error);
     }

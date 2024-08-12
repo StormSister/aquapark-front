@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import PromotionForm from './PromotionForm';
 
+const token = localStorage.getItem('accessToken');
+
+const getHeaders = () => ({
+    headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+    }
+});
+
 const PromotionManager = () => {
     const [showAddForm, setShowAddForm] = useState(false);
     const [promotions, setPromotions] = useState([]);
@@ -19,7 +28,7 @@ const PromotionManager = () => {
             queryParams.endDate = endDate;
         }
 
-        axios.get('http://localhost:8080/api/promotions/search', { params: queryParams })
+        axios.get('http://localhost:8080/api/promotions/search', getHeaders(), { params: queryParams })
         .then(response => {
             console.log(response.data);
             setPromotions(response.data);
@@ -31,7 +40,7 @@ const PromotionManager = () => {
     };
 
     const handleShowCurrentPromotions = () => {
-        axios.get('http://localhost:8080/api/promotions/current')
+        axios.get('http://localhost:8080/promotions/current')
         .then(response => {
             console.log(response.data);
             setPromotions(response.data);

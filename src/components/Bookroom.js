@@ -54,7 +54,7 @@ const ReservationForm = () => {
             const formattedStartDate = startDate.toISOString().split('T')[0];
             const formattedEndDate = endDate.toISOString().split('T')[0];
 
-            const response = await axios.get('http://localhost:8080/api/rooms/available', {
+            const response = await axios.get('http://localhost:8080/rooms/available', {
                 params: {
                     startDate: formattedStartDate,
                     endDate: formattedEndDate
@@ -102,7 +102,7 @@ const ReservationForm = () => {
                 }
             }));
 
-            await axios.post('http://localhost:8080/api/reservations', reservationRequests);
+            await axios.post('http://localhost:8080/reservations', reservationRequests);
             alert('Reservation successful!');
             navigate('/');
         } catch (error) {

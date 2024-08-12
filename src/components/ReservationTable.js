@@ -14,9 +14,21 @@ const ReservationsTable = () => {
         fetchReservations();
     }, []);
 
+    const getAuthToken = () => {
+        return localStorage.getItem('accessToken'); 
+    };
+
+
     const fetchReservations = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/reservations');
+            const token = getAuthToken();
+            console.log("Dodajemy token: "+ token)
+            const response = await axios.get('http://localhost:8080/reservations/api/all', {
+                headers: {
+                    'Authorization': `${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
             setReservations(response.data);
         } catch (error) {
             console.error('Error fetching reservations', error);
@@ -25,7 +37,13 @@ const ReservationsTable = () => {
 
     const handleCancel = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/api/reservations/${id}`);
+            const token = getAuthToken();
+            await axios.delete(`http://localhost:8080/reservations/api/${id}`, {
+                headers: {
+                    'Authorization':`${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
             setNotification('Reservation cancelled successfully');
             fetchReservations();
         } catch (error) {
@@ -81,6 +99,7 @@ const ReservationsTable = () => {
 };
 
 export default ReservationsTable;
+
 
 
 

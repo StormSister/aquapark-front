@@ -1,65 +1,130 @@
-/* Navbar.css */
+.container-fluid {
+  width: 100%;
+  padding: 0 20px;
+}
 
-/* Ogólny styl dla navbaru */
+/* Navbar Styles */
 .navbar-custom {
-  background-color: #343a40; /* Ciemne tło */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 20px;
+  background-color: transparent;
+  width: 100%;
+  padding: 10px 0;
+  margin-bottom: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  border-radius: 8px;
+  transition: top 0.3s;
+}
+
+.navbar-custom.hidden {
+  top: -100px;
+}
+
+.navbar-custom.visible {
+  top: 0;
 }
 
 .navbar-custom .nav-link {
-  color: white; /* Białe litery */
+  color: rgb(250, 73, 3);
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s, border-radius 0.01s;
+  cursor: pointer;
 }
 
 .navbar-custom .nav-link:hover {
-  background-color: #495057; /* Ciemniejszy odcień przy najechaniu */
-  color: white; /* Białe litery przy najechaniu */
+  background-color: rgb(245, 111, 59);
+  color: white;
+  border-radius: 8px;
 }
 
-.navbar-custom .navbar-brand {
-  color: white; /* Biała marka */
+.navbar-brand {
+  display: flex;
+  align-items: center;
 }
 
-.navbar-custom .navbar-brand:hover {
-  color: white; /* Biała marka przy najechaniu */
+.navbar-brand .logo {
+  height: 60px;
+  transition: transform 0.3s, height 0.3s;
+}
+
+.navbar-brand .logo:hover {
+  transform: scale (1.1);
+  height: 80px;
 }
 
 .menu-icon {
-  font-size: 24px;
+  display: none; 
   cursor: pointer;
+  font-size: 24px;
   color: white;
-  display: none; /* Ukrywamy ikonę menu na większych ekranach */
 }
 
-.navbar-links {
+
+.navbar-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between; /* Rozsuń elementy wzdłuż osi głównej */
+  align-items: center;
 }
 
 .nav-item {
-  margin-right: 10px; /* Dodaj margines po prawej stronie każdego elementu */
+  margin-right: 20px;
 }
 
+.nav-link {
+  color: rgb(250, 73, 15);
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: #ddd;
+  cursor: pointer;
+}
+
+
+.ms-auto {
+  margin-left: auto;
+}
+
+.btn-outline-danger {
+  color: rgb(250, 73, 3);
+  border: 1px solid white;
+  background: none;
+  padding: 5px 10px;
+}
+
+.btn-outline-danger:hover {
+  background-color: red;
+  border-color: red;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .navbar-custom {
+  .navbar-nav {
+    display: none; /* Hide menu by default on small screens */
     flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .navbar-links {
-    display: none;
+    background-color: #333;
+    position: absolute;
+    top: 50px; /* Adjust according to navbar height */
+    left: 0;
     width: 100%;
-    flex-direction: column;
+    padding: 10px 0;
   }
 
-  .navbar-links.active {
-    display: flex;
+  .navbar-collapse.active .navbar-nav {
+    display: flex; /* Show menu when active */
   }
 
   .menu-icon {
-    display: block; /* Pokazujemy ikonę menu na mniejszych ekranach */
+    display: block; /* Show hamburger icon on small screens */
+  }
+
+  .nav-item {
+    margin-right: 0;
+    margin-bottom: 10px;
   }
 }
