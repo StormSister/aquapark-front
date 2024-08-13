@@ -27,10 +27,11 @@
 }
 
 .navbar-custom .nav-link {
-  color: rgb(250, 73, 3);
+  color: rgb(250, 73, 15);
   border-radius: 8px;
   transition: background-color 0.3s, color 0.3s, border-radius 0.01s;
   cursor: pointer;
+  padding: 10px 15px; /* Uniform padding for all nav links */
 }
 
 .navbar-custom .nav-link:hover {
@@ -39,6 +40,7 @@
   border-radius: 8px;
 }
 
+/* Ensure logo scales and aligns correctly */
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -54,6 +56,7 @@
   height: 80px;
 }
 
+/* Menu icon for mobile */
 .menu-icon {
   display: none; 
   cursor: pointer;
@@ -71,7 +74,7 @@
 }
 
 .nav-item {
-  margin-right: 20px;
+  margin-right: 20px; /* Spacing between items */
 }
 
 .nav-link {
@@ -79,11 +82,11 @@
   text-decoration: none;
   font-size: 16px;
   cursor: pointer;
+  padding: 10px 15px; /* Uniform padding for all nav links */
 }
 
 .nav-link:hover {
   color: #ddd;
-  cursor: pointer;
 }
 
 /* Navbar sections */
@@ -108,10 +111,11 @@
 
 /* Button styles */
 .btn-outline-danger {
-  color: rgb(250, 73, 3);
+  color: rgb(250, 73, 15);
   border: 1px solid white;
   background: none;
   padding: 5px 10px;
+  border-radius: 8px; /* Match border-radius of nav-links */
 }
 
 .btn-outline-danger:hover {

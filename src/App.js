@@ -5,17 +5,17 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import BuyTickets from './components/BuyTickets';
-import Bookroom from './components/Bookroom'; 
-import WorkerDashboard from './components/WorkerDashboard';
+import Bookroom from './components/Reservation/Bookroom'; 
 import ManagerDashboard from './components/ManagerDashboard';
 import Navbar from './components/Navbar';
 import YourAccount from './components/YourAccount'; 
 import Users from './components/Users';
 import CheckTicket from './components/CheckTicket';
-import ReservationTable from './components/ReservationTable';
+import ReservationTable from './components/Reservation/ReservationTable';
 import ManagePrices from './components/Prices/ManagePrices';
 import PromotionManager from './components/Promotions/PromotionManager';
 import LoginSuccess from './components/LoginSuccess';
+import Payment from './Payment'; 
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -89,7 +89,6 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/buy-tickets" element={<BuyTickets />} />
           <Route path="/book-room" element={<Bookroom />} />
-          <Route path="/worker-dashboard" element={<WorkerDashboard />} />
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/your-account" element={<YourAccount />} /> 
           <Route path="/manage-users" element={<Users />} />
@@ -97,6 +96,7 @@ const App = () => {
           <Route path="/cancel-reservation" element={<ReservationTable />} />
           <Route path="/change-price" element={<ManagePrices />} />
           <Route path="/add-promotion" element={<PromotionManager />} />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
       </div>
     </Router>

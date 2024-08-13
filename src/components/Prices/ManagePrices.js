@@ -17,12 +17,7 @@ const ManagePrices = () => {
   const fetchPrices = async () => {
     try {
       const token = getAuthToken(); // Pobieranie tokena
-      const response = await axios.get('http://localhost:8080/api/prices', {
-        headers: {
-          'Authorization': `${token}`,  // Dodanie tokena do nagłówka
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await axios.get('http://localhost:8080/prices');
       setPrices(response.data);
     } catch (error) {
       console.error('Error fetching prices:', error);
