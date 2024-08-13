@@ -17,6 +17,7 @@ import PromotionManager from './components/Promotions/PromotionManager';
 import LoginSuccess from './components/LoginSuccess';
 import Payment from './components/Payment'; 
 import SuccessPage from './components/SuccessPage';
+import Confirmation from './components/Confirmation';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -98,7 +99,7 @@ const App = () => {
           <Route path="/add-promotion" element={<PromotionManager />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/success" element={<SuccessPage />} />
-        {/* <Route path="/cancel" element={<Cancel />} /> */}
+        <Route path="/confirmation" element={<Confirmation />} />
         </Routes>
       </div>
     </Router>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
@@ -24,6 +24,49 @@ const BuyTickets = () => {
     const [message, setMessage] = useState('');
     const [errors, setErrors] = useState(null);
 
+   
+    const [adultPrice, setAdultPrice] = useState(0);
+    const [childPrice, setChildPrice] = useState(0);
+
+  
+    const [totalPrice, setTotalPrice] = useState(0);
+
+    
+    const calculateTotalPrice = (adults, children, adultPrice, childPrice) => {
+        return (adults * adultPrice) + (children * childPrice);
+    };
+
+
+    useEffect(() => {
+        const fetchPrices = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/prices');
+                const data = await response.json();
+
+                console.log("Prices:", JSON.stringify(data, null, 2));
+
+                const adultPrice = data.find(price => price.type === 'Ticket' && price.category === 'Standard')?.price || 0;
+                const childPrice = data.find(price => price.type === 'Ticket' && price.category === 'Child')?.price || 0;
+
+                setAdultPrice(adultPrice);
+                setChildPrice(childPrice);
+
+                setTotalPrice(calculateTotalPrice(adults, children, adultPrice, childPrice));
+
+                console.log(`Adult price: ${adultPrice} Child price: ${childPrice}`);
+            } catch (error) {
+                console.error("Error fetching prices:", error);
+            }
+        };
+
+        fetchPrices();
+    }, []); 
+
+    
+    useEffect(() => {
+        setTotalPrice(calculateTotalPrice(adults, children, adultPrice, childPrice));
+    }, [adults, children, adultPrice, childPrice]);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -33,13 +76,15 @@ const BuyTickets = () => {
 
             await schema.validate(requestData, { abortEarly: false });
 
+          
+
             const response = await fetch('http://localhost:8080/create-checkout-session', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    totalPrice: 1000,
+                  totalPrice: totalPrice * 100,
                     paymentType: 'ticket'
                 }),
             });
@@ -51,11 +96,11 @@ const BuyTickets = () => {
             const { sessionId } = await response.json();
             console.log('Stripe Session ID:', sessionId);
 
-            // Store ticketData and sessionId in localStorage
+            
             localStorage.setItem('ticketData', JSON.stringify({ email, adults, children, isGroup }));
             localStorage.setItem('sessionId', sessionId);
 
-            // Redirect to Stripe Checkout
+            
             const { error } = await stripe.redirectToCheckout({ sessionId });
 
             if (error) {
@@ -92,7 +137,7 @@ const BuyTickets = () => {
                     {errors && errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
                 </div>
                 <div>
-                    <label>Adults:</label>
+                    <label>Adults (Price: {adultPrice}):</label>
                     <input
                         type="number"
                         value={adults}
@@ -103,7 +148,7 @@ const BuyTickets = () => {
                     {errors && errors.adults && <p style={{ color: 'red' }}>{errors.adults}</p>}
                 </div>
                 <div>
-                    <label>Children:</label>
+                    <label>Children (Price: {childPrice}):</label>
                     <input
                         type="number"
                         value={children}
@@ -126,6 +171,12 @@ const BuyTickets = () => {
                 <div>
                     <CardElement />
                 </div>
+
+                {/* Wyświetlanie całkowitej ceny */}
+                <div>
+                    <h3>Total Price: {totalPrice}</h3>
+                </div>
+
                 <button type="submit" disabled={!stripe}>Purchase</button>
             </form>
             {message && <p>{message}</p>}
@@ -134,4 +185,5 @@ const BuyTickets = () => {
 };
 
 export default BuyTickets;
+
 
