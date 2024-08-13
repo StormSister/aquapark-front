@@ -1,20 +1,20 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Carousel.css";
 
 function Carousel({ images }) {
   const [current, setCurrent] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
-  let timeOut = null;
+  const timeOutRef = useRef(null);
 
   useEffect(() => {
-    timeOut =
-      autoPlay &&
-      setTimeout(() => {
+    if (autoPlay) {
+      timeOutRef.current = setTimeout(() => {
         slideRight();
       }, 2500);
-  });
+    }
+
+    return () => clearTimeout(timeOutRef.current);
+  }, [autoPlay, current]);
 
   const slideRight = () => {
     setCurrent(current === images.length - 1 ? 0 : current + 1);
@@ -23,34 +23,32 @@ function Carousel({ images }) {
   const slideLeft = () => {
     setCurrent(current === 0 ? images.length - 1 : current - 1);
   };
-  console.log(current);
+
   return (
     <div
       className="carousel"
       onMouseEnter={() => {
         setAutoPlay(false);
-        clearTimeout(timeOut);
+        clearTimeout(timeOutRef.current);
       }}
       onMouseLeave={() => {
         setAutoPlay(true);
       }}
     >
       <div className="carousel_wrapper">
-        {images.map((image, index) => {
-          return (
-            <div
-              key={index}
-              className={
-                index == current
-                  ? "carousel_card carousel_card-active"
-                  : "carousel_card"
-              }
-            >
-              <img className="card_image" src={image.image} alt="" />
-              <div className="card_overlay"></div>
-            </div>
-          );
-        })}
+        {images.map((image, index) => (
+          <div
+            key={index}
+            className={
+              index === current
+                ? "carousel_card carousel_card-active"
+                : "carousel_card"
+            }
+          >
+            <img className="card_image" src={image.image} alt="" />
+            <div className="card_overlay"></div>
+          </div>
+        ))}
         <div className="carousel_arrow_left" onClick={slideLeft}>
           &lsaquo;
         </div>
@@ -58,19 +56,17 @@ function Carousel({ images }) {
           &rsaquo;
         </div>
         <div className="carousel_pagination">
-          {images.map((_, index) => {
-            return (
-              <div
-                key={index}
-                className={
-                  index == current
-                    ? "pagination_dot pagination_dot-active"
-                    : "pagination_dot"
-                }
-                onClick={() => setCurrent(index)}
-              ></div>
-            );
-          })}
+          {images.map((_, index) => (
+            <div
+              key={index}
+              className={
+                index === current
+                  ? "pagination_dot pagination_dot-active"
+                  : "pagination_dot"
+              }
+              onClick={() => setCurrent(index)}
+            ></div>
+          ))}
         </div>
       </div>
     </div>

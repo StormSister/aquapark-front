@@ -15,8 +15,8 @@ import ReservationTable from './components/Reservation/ReservationTable';
 import ManagePrices from './components/Prices/ManagePrices';
 import PromotionManager from './components/Promotions/PromotionManager';
 import LoginSuccess from './components/LoginSuccess';
-import Payment from './Payment'; 
-
+import Payment from './components/Payment'; 
+import SuccessPage from './components/SuccessPage';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -97,6 +97,8 @@ const App = () => {
           <Route path="/change-price" element={<ManagePrices />} />
           <Route path="/add-promotion" element={<PromotionManager />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/success" element={<SuccessPage />} />
+        {/* <Route path="/cancel" element={<Cancel />} /> */}
         </Routes>
       </div>
     </Router>

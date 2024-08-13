@@ -1,55 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-
-const token = localStorage.getItem('accessToken');
-
-const getHeaders = () => ({
-  headers: {
-      'Authorization': token,
-      'Content-Type': 'application/json'
-  }
-});
-
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 
 const BuyTickets = () => {
     const navigate = useNavigate();
+    const stripe = useStripe();
+    const elements = useElements();
 
-    const [email, setEmail] = useState('');
-    const [adults, setAdults] = useState(0);
-    const [children, setChildren] = useState(0);
-    const [isGroup, setIsGroup] = useState(false);
-    const [prices, setPrices] = useState({});
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [errors, setErrors] = useState(null);
-
-    
-    useEffect(() => {
-        const fetchPrices = async () => {
-            const response = await fetch('http://localhost:8080/prices');
-            const data = await response.json();
-            console.log(data);
-
-            const pricesObject = data.reduce((acc, price) => {
-              acc[`${price.type}-${price.category}`] = price.price * 100
-                return acc;
-            }, {});
-            console.log(pricesObject);
-            setPrices(pricesObject);
-        };
-
-        fetchPrices();
-    }, []);
-
-    // Przeliczanie całkowitej kwoty
-    useEffect(() => {
-        const adultPrice = prices['Ticket-Standard'] || 0;
-        const childPrice = prices['Ticket-Child'] || 0;
-        const total = adults * adultPrice + children * childPrice;
-        setTotalPrice(total);
-    }, [adults, children, prices]);
-
-    // Schemat walidacji
     const schema = yup.object().shape({
         email: yup.string().email().required(),
         adults: yup.number().min(0).integer(),
@@ -59,15 +17,51 @@ const BuyTickets = () => {
         return adults > 0 || children > 0;
     }).required();
 
+    const [email, setEmail] = useState('');
+    const [adults, setAdults] = useState(0);
+    const [children, setChildren] = useState(0);
+    const [isGroup, setIsGroup] = useState(false);
+    const [message, setMessage] = useState('');
+    const [errors, setErrors] = useState(null);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const requestData = { email, adults, children, isGroup, totalPrice };
+            const requestData = { email, adults, children, isGroup };
+            console.log('Request Body:', requestData);
+
             await schema.validate(requestData, { abortEarly: false });
 
-            // Przekierowanie do płatności, przekazując dane biletów oraz kwotę
-            navigate('/payment', { state: requestData });
+            const response = await fetch('http://localhost:8080/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    totalPrice: 1000,
+                    paymentType: 'ticket'
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create checkout session');
+            }
+
+            const { sessionId } = await response.json();
+            console.log('Stripe Session ID:', sessionId);
+
+            // Store ticketData and sessionId in localStorage
+            localStorage.setItem('ticketData', JSON.stringify({ email, adults, children, isGroup }));
+            localStorage.setItem('sessionId', sessionId);
+
+            // Redirect to Stripe Checkout
+            const { error } = await stripe.redirectToCheckout({ sessionId });
+
+            if (error) {
+                console.error('Error redirecting to checkout:', error);
+                setMessage('An error occurred while redirecting to checkout.');
+            }
 
         } catch (error) {
             if (error.name === 'ValidationError') {
@@ -78,6 +72,7 @@ const BuyTickets = () => {
                 setErrors(validationErrors);
             } else {
                 console.error('Error submitting form:', error);
+                setMessage('An error occurred while processing your request.');
             }
         }
     };
@@ -100,7 +95,7 @@ const BuyTickets = () => {
                     <label>Adults:</label>
                     <input
                         type="number"
-                        value={adults.toString()}
+                        value={adults}
                         onChange={(e) => setAdults(Number(e.target.value))}
                         min="0"
                         required
@@ -111,7 +106,7 @@ const BuyTickets = () => {
                     <label>Children:</label>
                     <input
                         type="number"
-                        value={children.toString()}
+                        value={children}
                         onChange={(e) => setChildren(Number(e.target.value))}
                         min="0"
                         required
@@ -129,14 +124,14 @@ const BuyTickets = () => {
                     </label>
                 </div>
                 <div>
-                    <h3>Total Price: ${totalPrice / 100}</h3> {/* Konwersja do dolarów */}
+                    <CardElement />
                 </div>
-                <button type="submit">Proceed to Payment</button>
+                <button type="submit" disabled={!stripe}>Purchase</button>
             </form>
+            {message && <p>{message}</p>}
         </div>
     );
 };
 
 export default BuyTickets;
-
 
