@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode'; 
-import Home from './components/Home';
-import Login from './components/Login';
-import Register from './components/Register';
-import BuyTickets from './components/BuyTickets';
+import Home from './components/Home/Home';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
+import BuyTickets from './components/Tickets/BuyTickets';
 import Bookroom from './components/Reservation/Bookroom'; 
-import ManagerDashboard from './components/ManagerDashboard';
-import Navbar from './components/Navbar';
-import YourAccount from './components/YourAccount'; 
-import Users from './components/Users';
-import CheckTicket from './components/CheckTicket';
+import Navbar from './components/Navbar/Navbar';
+import YourAccount from './components/Users/YourAccount'; 
+import Users from './components/Users/Users';
+import CheckTicket from './components/Tickets/CheckTicket';
 import ReservationTable from './components/Reservation/ReservationTable';
 import ManagePrices from './components/Prices/ManagePrices';
 import PromotionManager from './components/Promotions/PromotionManager';
-import LoginSuccess from './components/LoginSuccess';
-import Payment from './components/Payment'; 
-import SuccessPage from './components/SuccessPage';
-import Confirmation from './components/Confirmation';
+import LoginSuccess from './components/Auth/LoginSuccess';
+import Payment from './components/Payments/Payment'; 
+import SuccessPage from './components/Payments/SuccessPage';
+import Confirmation from './components/Payments/Confirmation';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -90,7 +89,6 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/buy-tickets" element={<BuyTickets />} />
           <Route path="/book-room" element={<Bookroom />} />
-          <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/your-account" element={<YourAccount />} /> 
           <Route path="/manage-users" element={<Users />} />
           <Route path="/check-ticket" element={<CheckTicket />} />
