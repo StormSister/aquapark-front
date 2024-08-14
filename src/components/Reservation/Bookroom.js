@@ -5,6 +5,7 @@ import RoomCard from './RoomCard';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useStripe } from '@stripe/react-stripe-js';
 import './Bookroom.css';
 
 const ReservationForm = () => {
@@ -16,6 +17,7 @@ const ReservationForm = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [showUserForm, setShowUserForm] = useState(false);
     const navigate = useNavigate();
+    const stripe = useStripe();
 
     const userFormSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email').required('Required'),
@@ -38,7 +40,8 @@ const ReservationForm = () => {
         let totalCapacity = 0;
 
         Object.values(newSelectedRooms).forEach(room => {
-            newTotalPrice += room.price * room.quantity * (Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) - 1);
+            const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)-1);
+            newTotalPrice += room.price * room.quantity * days;
             totalCapacity += room.capacity * room.quantity;
         });
 
@@ -88,25 +91,49 @@ const ReservationForm = () => {
     const handleUserFormSubmit = async (values) => {
         const selectedRoomTypes = Object.values(selectedRooms).filter(room => room.quantity > 0);
 
-        try {
-            const reservationRequests = selectedRoomTypes.map(room => ({
-                roomType: room.name,
-                startDate: startDate.toISOString().split('T')[0],
-                endDate: endDate.toISOString().split('T')[0],
-                numberOfPersons: room.quantity,
-                user: {
-                    email: values.email,
-                    firstName: values.firstName,
-                    lastName: values.lastName,
-                    phoneNumber: values.phoneNumber
-                }
-            }));
+        const reservationData = selectedRoomTypes.map(room => ({
+            roomType: room.name,
+            startDate: startDate.toISOString().split('T')[0],
+            endDate: endDate.toISOString().split('T')[0],
+            numberOfPersons: room.quantity,
+            user: {
+                email: values.email,
+                firstName: values.firstName,
+                lastName: values.lastName,
+                phoneNumber: values.phoneNumber
+            }
+        }));
 
-            await axios.post('http://localhost:8080/reservations', reservationRequests);
-            alert('Reservation successful!');
-            navigate('/');
+        try {
+            localStorage.setItem('reservationData', JSON.stringify(reservationData));
+            localStorage.setItem('paymentType', 'reservation');
+
+            const response = await fetch('http://localhost:8080/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    totalPrice: totalPrice * 100,
+                    paymentType: 'reservation',
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create checkout session');
+            }
+
+            const { sessionId } = await response.json();
+            localStorage.setItem('sessionId', sessionId);
+
+            const { error } = await stripe.redirectToCheckout({ sessionId });
+            if (error) {
+                console.error('Error redirecting to checkout:', error);
+                alert('An error occurred during payment.');
+            }
         } catch (error) {
             console.error('Error making reservation', error);
+            alert('An error occurred while making the reservation.');
         }
     };
 
@@ -232,7 +259,7 @@ const ReservationForm = () => {
                     <div className="form-field">
                         <label>Phone Number:</label>
                         <input
-                            type="tel"
+                            type="text"
                             name="phoneNumber"
                             value={userForm.values.phoneNumber}
                             onChange={userForm.handleChange}
@@ -243,7 +270,7 @@ const ReservationForm = () => {
                             <div className="error">{userForm.errors.phoneNumber}</div>
                         ) : null}
                     </div>
-                    <button type="submit">Confirm</button>
+                    <button type="submit">Proceed to Payment</button>
                 </form>
             )}
         </div>
@@ -251,7 +278,6 @@ const ReservationForm = () => {
 };
 
 export default ReservationForm;
-
 
 
 

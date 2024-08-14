@@ -10,8 +10,8 @@ const BuyTickets = () => {
 
     const schema = yup.object().shape({
         email: yup.string().email().required(),
-        adults: yup.number().min(0).integer(),
-        children: yup.number().min(0).integer(),
+        adults: yup.number().min(0).integer().required(),
+        children: yup.number().min(0).integer().required(),
     }).test('sum-validation', 'Musisz wybrać co najmniej jedną osobę (dorosłego lub dziecko)', function(values) {
         const { adults, children } = values;
         return adults > 0 || children > 0;
@@ -23,19 +23,13 @@ const BuyTickets = () => {
     const [isGroup, setIsGroup] = useState(false);
     const [message, setMessage] = useState('');
     const [errors, setErrors] = useState(null);
-
-   
     const [adultPrice, setAdultPrice] = useState(0);
     const [childPrice, setChildPrice] = useState(0);
-
-  
     const [totalPrice, setTotalPrice] = useState(0);
 
-    
     const calculateTotalPrice = (adults, children, adultPrice, childPrice) => {
         return (adults * adultPrice) + (children * childPrice);
     };
-
 
     useEffect(() => {
         const fetchPrices = async () => {
@@ -43,26 +37,20 @@ const BuyTickets = () => {
                 const response = await fetch('http://localhost:8080/prices');
                 const data = await response.json();
 
-                console.log("Prices:", JSON.stringify(data, null, 2));
-
                 const adultPrice = data.find(price => price.type === 'Ticket' && price.category === 'Standard')?.price || 0;
                 const childPrice = data.find(price => price.type === 'Ticket' && price.category === 'Child')?.price || 0;
 
                 setAdultPrice(adultPrice);
                 setChildPrice(childPrice);
-
                 setTotalPrice(calculateTotalPrice(adults, children, adultPrice, childPrice));
-
-                console.log(`Adult price: ${adultPrice} Child price: ${childPrice}`);
             } catch (error) {
                 console.error("Error fetching prices:", error);
             }
         };
 
         fetchPrices();
-    }, []); 
+    }, [adults, children]);
 
-    
     useEffect(() => {
         setTotalPrice(calculateTotalPrice(adults, children, adultPrice, childPrice));
     }, [adults, children, adultPrice, childPrice]);
@@ -72,11 +60,7 @@ const BuyTickets = () => {
 
         try {
             const requestData = { email, adults, children, isGroup };
-            console.log('Request Body:', requestData);
-
             await schema.validate(requestData, { abortEarly: false });
-
-          
 
             const response = await fetch('http://localhost:8080/create-checkout-session', {
                 method: 'POST',
@@ -84,7 +68,7 @@ const BuyTickets = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  totalPrice: totalPrice * 100,
+                    totalPrice: totalPrice * 100,
                     paymentType: 'ticket'
                 }),
             });
@@ -94,13 +78,13 @@ const BuyTickets = () => {
             }
 
             const { sessionId } = await response.json();
-            console.log('Stripe Session ID:', sessionId);
 
-            
+            // Zapisywanie danych do localStorage
             localStorage.setItem('ticketData', JSON.stringify({ email, adults, children, isGroup }));
             localStorage.setItem('sessionId', sessionId);
+            localStorage.setItem('paymentType', 'ticket');
 
-            
+            // Przekierowanie do Stripe
             const { error } = await stripe.redirectToCheckout({ sessionId });
 
             if (error) {
@@ -126,6 +110,7 @@ const BuyTickets = () => {
         <div>
             <h1>Purchase Tickets</h1>
             <form onSubmit={handleSubmit}>
+                {/* Formularz */}
                 <div>
                     <label>Email:</label>
                     <input
@@ -172,7 +157,6 @@ const BuyTickets = () => {
                     <CardElement />
                 </div>
 
-                {/* Wyświetlanie całkowitej ceny */}
                 <div>
                     <h3>Total Price: {totalPrice}</h3>
                 </div>

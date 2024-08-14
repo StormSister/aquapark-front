@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Payment = () => {
     const stripe = useStripe();
     const elements = useElements();
     const location = useLocation();
+    const navigate = useNavigate();
 
-    const { email, adults, children, isGroup, totalPrice } = location.state || {};
+    const paymentData = location.state || {};
+    const { totalPrice, paymentType } = paymentData; 
+
+    useEffect(() => {
+        if (!paymentData || !totalPrice || !paymentType) {
+            navigate('/'); // Redirect if no payment data is found
+        }
+    }, [paymentData, totalPrice, paymentType, navigate]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -16,32 +24,41 @@ const Payment = () => {
             return;
         }
 
-        console.log('Payment data:', { email, adults, children, isGroup, totalPrice });  
+        try {
+            // Step 1: Create the checkout session on the server
+            const response = await fetch('http://localhost:8080/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    totalPrice,
+                    paymentType,
+                }),
+            });
 
-        const response = await fetch('http://localhost:8080/create-checkout-session', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email,
-                adults,
-                children,
-                isGroup,
-                totalPrice,
-            }),
-        });
+            if (!response.ok) {
+                throw new Error('Failed to create checkout session');
+            }
 
-        const session = await response.json();
+            const session = await response.json();
 
-        console.log('Checkout session:', session);  // Debug log
+            // Step 2: Redirect to Stripe Checkout
+            const result = await stripe.redirectToCheckout({
+                sessionId: session.sessionId,
+            });
 
-        const result = await stripe.redirectToCheckout({
-            sessionId: session.id,
-        });
-
-        if (result.error) {
-            console.error(result.error.message);
+            if (result.error) {
+                console.error(result.error.message);
+                // Optionally display error message to user
+            } else {
+                // Save session ID and other data in localStorage
+                localStorage.setItem('sessionId', session.sessionId);
+                localStorage.setItem('paymentData', JSON.stringify(paymentData));
+            }
+        } catch (error) {
+            console.error('Payment failed:', error);
+            // Optionally display error message to user
         }
     };
 
@@ -49,9 +66,8 @@ const Payment = () => {
         <div>
             <h2>Payment</h2>
             <form onSubmit={handleSubmit}>
-                <CardElement />
                 <button type="submit" disabled={!stripe}>
-                    Pay
+                    Pay ${totalPrice}
                 </button>
             </form>
         </div>
