@@ -1,14 +1,69 @@
+@font-face {
+  font-family: CustomFont;
+  src: url("/public/fonts/Simply2CondensedRegular.ttf");
+}
+
 .img {
-    width: 400px;
-    height: 300px;
-    object-fit: cover;
-    display: block;
-    overflow: hidden;
-  }
-  
-  body {
-    display: grid;
-    place-items: center;
-    height: 100vh;
-    background-color: var(--bgColor);
-  }
+  width: 400px;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  overflow: hidden;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  background-color: var(--bgColor);
+}
+
+.hero-section {
+  height: 100vh;
+  width: 100vw;
+  background-image: url("/public/assets/images/bal_front.jpg"); /* Replace with your image path */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero-section h1 {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  font-family: "Baloo 2", cursive;
+}
+
+.hero-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-family: "Baloo 2", cursive;
+}
+
+.buy-tickets-button {
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  background-color: rgb(250, 73, 15);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.buy-tickets-button:hover {
+  background-color: #e04e2a;
+}
+
+.header-section {
+  text-align: center;
+  padding: 20px;
+  color: #333;
+  font-family: "Baloo 2", cursive;
+  font-size: 4rem;
+  font-weight: bold;
+}

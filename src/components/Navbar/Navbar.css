@@ -1,12 +1,12 @@
 /* Container settings */
 .container-fluid {
   width: 100%;
-  padding: 0 20px;
+  padding: 0 10px;
 }
 
 /* Navbar Styles */
 .navbar-custom {
-  background-color: transparent;
+  background-color: rgba(102, 180, 219, 0.7);
   width: 100%;
   padding: 10px 0;
   margin-bottom: auto;
@@ -47,18 +47,18 @@
 }
 
 .navbar-brand .logo {
-  height: 60px;
+  height: 40px;
   transition: transform 0.3s, height 0.3s;
 }
 
 .navbar-brand .logo:hover {
   transform: scale(1.1);
-  height: 80px;
+  height: 50px;
 }
 
 /* Menu icon for mobile */
 .menu-icon {
-  display: none; 
+  display: none;
   cursor: pointer;
   font-size: 24px;
   color: white;
@@ -138,7 +138,7 @@
   .navbar-nav-right .nav-link {
     margin-left: 0; /* Remove margin for stacked links */
   }
-  
+
   .navbar-nav-right .btn-outline-danger {
     margin-left: 0; /* Remove margin for stacked logout button */
   }
