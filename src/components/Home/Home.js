@@ -2,8 +2,9 @@ import React from "react";
 import Carousel from "./Carousel";
 import { data } from "./imgsForCarousel";
 import { Link } from "react-router-dom";
-// import { attraction } from "./AttractionsData";
+import { facilityData } from "../Facilities/FacilityData";
 import "./Home.css";
+import FacilitySection from "../Facilities/FacilitySection";
 
 const Home = ({ attractions }) => {
   return (
@@ -21,16 +22,19 @@ const Home = ({ attractions }) => {
       <div className="carousel">
         <Carousel images={data} />
       </div>
-      <section className="attractions-section">
-        <div className="attractions">
-          <h4>Attractions</h4>
-          {/* <ul>
-            {attractions.map((attraction) => (
-              <li key={attraction.id}>
-                <strong>{attraction.name}</strong>: {attraction.description}
-              </li>
-            ))}
-          </ul> */}
+      <section className="facilities-section">
+        <div>
+          {facilityData.map((info, index) => (
+            <FacilitySection
+              key={index}
+              image={info.image}
+              title={info.title}
+              description={info.description}
+              buttonText={info.buttonText}
+              link={info.link}
+              reverse={info.reverse}
+            />
+          ))}
         </div>
       </section>
     </div>
