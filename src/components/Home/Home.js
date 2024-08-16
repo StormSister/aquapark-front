@@ -4,6 +4,7 @@ import { data } from "./imgsForCarousel";
 import { Link } from "react-router-dom";
 import { facilityData } from "../Facilities/FacilityData";
 import "./Home.css";
+import Contact from "./Contact";
 import FacilitySection from "../Facilities/FacilitySection";
 
 const Home = ({ attractions }) => {
@@ -39,6 +40,7 @@ const Home = ({ attractions }) => {
           ))}
         </div>
       </section>
+      <Contact/>
     </div>
   );
 };
