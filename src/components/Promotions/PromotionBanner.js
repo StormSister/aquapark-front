@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// import './PromotionBanner.css';
 
 const PromotionBanner = () => {
     const [currentPromotions, setCurrentPromotions] = useState([]);
@@ -11,16 +10,20 @@ const PromotionBanner = () => {
 
     const fetchCurrentPromotions = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/promotions/current');
-            setCurrentPromotions(response.data);
+            const response = await axios.get('http://localhost:8080/api/promotions/current');
+            if (Array.isArray(response.data)) {
+                setCurrentPromotions(response.data);  // Ensure it's an array before setting state
+            } else {
+                console.error('Expected an array of promotions, but got:', response.data);
+            }
         } catch (error) {
-            console.error('Błąd podczas pobierania aktualnych promocji:', error);
+            console.error('Error fetching current promotions:', error);
         }
     };
 
     return (
         <div className="promotion-banner">
-            {currentPromotions.length > 0 && (
+            {currentPromotions.length > 0 ? (
                 <>
                     <h2>Current Promotions</h2>
                     <div className="promotion-details">
@@ -29,12 +32,16 @@ const PromotionBanner = () => {
                                 <p>Start Date: {new Date(promotion.startDate).toLocaleString()}</p>
                                 <p>End Date: {new Date(promotion.endDate).toLocaleString()}</p>
                                 <p>Description: {promotion.description}</p>
-                                <p>Discount: {promotion.discountAmount}%</p>
-                                <img src={promotion.imageUrl} alt="Promotion" />
+                                <p>Discount Amount: {promotion.discountAmount}%</p>
+                                {promotion.imagePath && (
+                                    <img src={`http://localhost:8080${promotion.imagePath}`} alt="Promotion" />
+                                )}
                             </div>
                         ))}
                     </div>
                 </>
+            ) : (
+                <p>No current promotions available.</p>
             )}
         </div>
     );

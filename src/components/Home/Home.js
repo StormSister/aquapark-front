@@ -6,6 +6,7 @@ import { facilityData } from "../Facilities/FacilityData";
 import "./Home.css";
 import Contact from "./Contact";
 import FacilitySection from "../Facilities/FacilitySection";
+import PromotionBanner from "../Promotions/PromotionBanner"
 
 const Home = ({ attractions }) => {
   return (
@@ -41,6 +42,7 @@ const Home = ({ attractions }) => {
         </div>
       </section>
       <Contact/>
+      <PromotionBanner/>
     </div>
   );
 };
