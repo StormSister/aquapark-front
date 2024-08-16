@@ -10,6 +10,14 @@ form .stripe-element {
   margin-bottom: 15px;
 }
 
+body {
+  font-family: 'Baloo 2', cursive;
+}
+
+.navbar-custom, .nav-link, .btn-outline-danger {
+  font-family: 'Baloo 2', cursive;
+}
+
 
 @media (max-width: 768px) {
   .navbar {

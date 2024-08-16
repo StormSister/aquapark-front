@@ -46,6 +46,7 @@ const SuccessPage = () => {
                 });
 
                 if (response.ok) {
+                    console.log(endpoint, dataToSubmit);
         
                     await fetch(endpoint, {
                         method: 'POST',

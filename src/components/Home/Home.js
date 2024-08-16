@@ -1,15 +1,15 @@
 import React from "react";
 import Carousel from "./Carousel";
 import { data } from "./imgsForCarousel";
-// import { attraction } from "./AttractionsData";
-import "./Home.css";
 
+import "./Home.css";
 const Home = ({ attractions }) => {
   return (
     <div>
       <div className="carousel">
         <Carousel images={data} />
       </div>
+
       <section className="attractions-section">
         <div className="attractions">
           <h4>Attractions</h4>
@@ -22,6 +22,8 @@ const Home = ({ attractions }) => {
           </ul> */}
         </div>
       </section>
+
+      
     </div>
   );
 };

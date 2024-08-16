@@ -4,9 +4,9 @@
   padding: 0 20px;
 }
 
-/* Navbar Styles */
+/*/* Ustawienie rozmiaru czcionki dla całego navbaru */
 .navbar-custom {
-  background-color: transparent;
+  background-color: rgba(216, 243, 255, 0.8); 
   width: 100%;
   padding: 10px 0;
   margin-bottom: auto;
@@ -16,8 +16,26 @@
   z-index: 1000;
   border-radius: 8px;
   transition: top 0.3s;
+  font-family: 'Baloo 2', cursive; /* Ustawienie czcionki na Baloo 2 */
+  font-weight: 600; /* Ustawienie wagi czcionki na Semi-Bold */
 }
 
+/* Ustawienie rozmiaru czcionki dla linków w navbarze */
+.navbar-custom .nav-link {
+  color: rgb(250, 53, 15);
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s, border-radius 0.01s;
+  cursor: pointer;
+  padding: 10px 15px; /* Uniform padding for all nav links */
+  font-weight: 600; /* Waga czcionki na Semi-Bold */
+  font-size: 18px; /* Ustawienie rozmiaru czcionki na 18px */
+}
+
+.navbar-custom .nav-link:hover {
+  background-color: rgb(245, 111, 59);
+  color: white;
+  border-radius: 8px;
+}
 .navbar-custom.hidden {
   top: -100px;
 }
@@ -27,7 +45,7 @@
 }
 
 .navbar-custom .nav-link {
-  color: rgb(250, 73, 15);
+  color: rgb(250, 53, 15);
   border-radius: 8px;
   transition: background-color 0.3s, color 0.3s, border-radius 0.01s;
   cursor: pointer;
