@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements } from '@stripe/react-stripe-js';
 
 const BuyTickets = () => {
     const navigate = useNavigate();
@@ -79,12 +79,10 @@ const BuyTickets = () => {
 
             const { sessionId } = await response.json();
 
-            // Zapisywanie danych do localStorage
             localStorage.setItem('ticketData', JSON.stringify({ email, adults, children, isGroup }));
             localStorage.setItem('sessionId', sessionId);
             localStorage.setItem('paymentType', 'ticket');
 
-            // Przekierowanie do Stripe
             const { error } = await stripe.redirectToCheckout({ sessionId });
 
             if (error) {
@@ -152,9 +150,6 @@ const BuyTickets = () => {
                         />
                         Group Ticket
                     </label>
-                </div>
-                <div>
-                    <CardElement />
                 </div>
 
                 <div>
