@@ -1,12 +1,12 @@
 /* Container settings */
 .container-fluid {
   width: 100%;
-  padding: 0 20px;
+  padding: 0 10px;
 }
 
-/*/* Ustawienie rozmiaru czcionki dla całego navbaru */
+/* Navbar Styles */
 .navbar-custom {
-  background-color: rgba(216, 243, 255, 0.8); 
+  background-color: rgba(207, 244, 252, 0.9); 
   width: 100%;
   padding: 10px 0;
   margin-bottom: auto;
@@ -16,26 +16,8 @@
   z-index: 1000;
   border-radius: 8px;
   transition: top 0.3s;
-  font-family: 'Baloo 2', cursive; /* Ustawienie czcionki na Baloo 2 */
-  font-weight: 600; /* Ustawienie wagi czcionki na Semi-Bold */
 }
 
-/* Ustawienie rozmiaru czcionki dla linków w navbarze */
-.navbar-custom .nav-link {
-  color: rgb(250, 53, 15);
-  border-radius: 8px;
-  transition: background-color 0.3s, color 0.3s, border-radius 0.01s;
-  cursor: pointer;
-  padding: 10px 15px; /* Uniform padding for all nav links */
-  font-weight: 600; /* Waga czcionki na Semi-Bold */
-  font-size: 18px; /* Ustawienie rozmiaru czcionki na 18px */
-}
-
-.navbar-custom .nav-link:hover {
-  background-color: rgb(245, 111, 59);
-  color: white;
-  border-radius: 8px;
-}
 .navbar-custom.hidden {
   top: -100px;
 }
@@ -44,12 +26,15 @@
   top: 0;
 }
 
+/* Increase font size and make font bold for nav links */
 .navbar-custom .nav-link {
-  color: rgb(250, 53, 15);
+  color: rgb(250, 73, 15);
   border-radius: 8px;
   transition: background-color 0.3s, color 0.3s, border-radius 0.01s;
   cursor: pointer;
   padding: 10px 15px; /* Uniform padding for all nav links */
+  font-size: 18px; /* Zwiększenie rozmiaru czcionki */
+  font-weight: bold; /* Pogrubienie czcionki */
 }
 
 .navbar-custom .nav-link:hover {
@@ -65,18 +50,18 @@
 }
 
 .navbar-brand .logo {
-  height: 60px;
+  height: 40px;
   transition: transform 0.3s, height 0.3s;
 }
 
 .navbar-brand .logo:hover {
   transform: scale(1.1);
-  height: 80px;
+  height: 50px;
 }
 
 /* Menu icon for mobile */
 .menu-icon {
-  display: none; 
+  display: none;
   cursor: pointer;
   font-size: 24px;
   color: white;
@@ -98,9 +83,10 @@
 .nav-link {
   color: rgb(250, 73, 15);
   text-decoration: none;
-  font-size: 16px;
+  font-size: 18px; /* Zwiększenie rozmiaru czcionki */
   cursor: pointer;
   padding: 10px 15px; /* Uniform padding for all nav links */
+  font-weight: bold; /* Pogrubienie czcionki */
 }
 
 .nav-link:hover {
@@ -111,6 +97,10 @@
 .navbar-nav-left {
   display: flex;
   flex: 1;
+}
+
+.navbar-nav-left .nav-item:first-child .nav-link {
+  margin-left: 40px; /* Adjust the value as needed */
 }
 
 .navbar-nav-right {
@@ -156,7 +146,7 @@
   .navbar-nav-right .nav-link {
     margin-left: 0; /* Remove margin for stacked links */
   }
-  
+
   .navbar-nav-right .btn-outline-danger {
     margin-left: 0; /* Remove margin for stacked logout button */
   }

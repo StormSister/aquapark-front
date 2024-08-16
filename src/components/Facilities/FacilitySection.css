@@ -1,0 +1,49 @@
+.facility-section {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  padding: 20px;
+}
+
+.facility-section.reverse {
+  flex-direction: row-reverse;
+}
+
+.facility-image {
+  flex: 1;
+  max-width: 50%;
+}
+
+.facility-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.facility-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.facility-content h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.facility-content p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.facility-button {
+  padding: 10px 20px;
+  background-color: rgb(250, 73, 15); /* Nowy kolor tła */
+  color: white; /* Kolor tekstu */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.facility-button:hover {
+  background-color: rgb(200, 58, 12); /* Opcjonalny kolor hover */
+}
