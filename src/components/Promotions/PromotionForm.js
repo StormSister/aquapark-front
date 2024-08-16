@@ -11,44 +11,37 @@ const PromotionForm = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (!startDate || !endDate) {
             alert('Please provide both start and end dates.');
             return;
         }
-
+    
         const formData = new FormData();
         formData.append('startDate', new Date(startDate).toISOString());
         formData.append('endDate', new Date(endDate).toISOString());
         formData.append('discountType', discountType);
         formData.append('discountAmount', discountAmount);
         formData.append('description', description);
-        console.log(formData);
-
-        const token = localStorage.getItem('accessToken');
-
-const getHeaders = () => ({
-    headers: {
-        'Authorization': token,
-        'Content-Type': 'application/json'
-    }
-});
-
+    
         if (image) {
             formData.append('image', image);
         }
-
-        console.log("Form Data to be sent:");
+    
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
         }
-
+    
         try {
-            const response = await axios.post('http://localhost:8080/promotions/api/add', getHeaders(), formData, {
+            const token = localStorage.getItem('accessToken');
+    
+            const response = await axios.post('http://localhost:8080/api/promotions/add', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Authorization': `${token}`,
+                    'Content-Type': 'multipart/form-data' 
                 }
             });
+    
             console.log('Response from server:', response.data);
             alert('Promocja została dodana!');
             onClose();
@@ -104,7 +97,11 @@ const getHeaders = () => ({
                 </div>
                 <div className="form-group">
                     <label>Załaduj zdjęcie:</label>
-                    <input type="file" onChange={e => setImage(e.target.files[0])} />
+                    <input 
+                        type="file" 
+                        accept="image/*"
+                        onChange={e => setImage(e.target.files[0])} 
+                    />
                 </div>
                 <div className="form-actions">
                     <button type="submit">Dodaj promocję</button>
@@ -116,4 +113,3 @@ const getHeaders = () => ({
 };
 
 export default PromotionForm;
-
