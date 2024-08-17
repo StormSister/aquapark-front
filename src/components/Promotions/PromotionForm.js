@@ -9,9 +9,8 @@ const PromotionForm = ({ onClose }) => {
     const [image, setImage] = useState(null);
 
     const [priceTypes, setPriceTypes] = useState([]);
-    const [selectedType, setSelectedType] = useState('');
-    const [filteredCategories, setFilteredCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [filteredCategories, setFilteredCategories] = useState([]);
 
     // Pobieranie typów i kategorii cen z endpointu
     useEffect(() => {
@@ -32,21 +31,21 @@ const PromotionForm = ({ onClose }) => {
 
     // Filtrowanie kategorii na podstawie wybranego typu
     useEffect(() => {
-        if (selectedType) {
+        if (selectedCategory) {
             // Filtrujemy kategorie dla wybranego typu
             const categories = [...new Set(priceTypes
-                .filter(price => price.type === selectedType)
+                .filter(price => price.category === selectedCategory)
                 .map(price => price.category))];
             setFilteredCategories(categories);
         } else {
             setFilteredCategories([]);
         }
-    }, [selectedType, priceTypes]);
+    }, [selectedCategory, priceTypes]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        if (!startDate || !endDate || !selectedType || !selectedCategory) {
+        if (!startDate || !endDate || !selectedCategory) {
             alert('Proszę wypełnić wszystkie wymagane pola.');
             return;
         }
@@ -54,10 +53,9 @@ const PromotionForm = ({ onClose }) => {
         const formData = new FormData();
         formData.append('startDate', new Date(startDate).toISOString());
         formData.append('endDate', new Date(endDate).toISOString());
-        formData.append('discountType', selectedType);
+        formData.append('discountType', selectedCategory); // Przekazywanie category jako discountType
         formData.append('discountAmount', discountAmount);
         formData.append('description', description);
-        formData.append('type', selectedType);
         formData.append('category', selectedCategory);
     
         if (image) {
@@ -68,7 +66,7 @@ const PromotionForm = ({ onClose }) => {
             const token = localStorage.getItem('accessToken');
             const response = await axios.post('http://localhost:8080/api/promotions/add', formData, {
                 headers: {
-                    'Authorization': `${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data' 
                 }
             });
@@ -105,19 +103,6 @@ const PromotionForm = ({ onClose }) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Typ biletu:</label>
-                    <select 
-                        value={selectedType} 
-                        onChange={e => setSelectedType(e.target.value)}
-                        required
-                    >
-                        <option value="">Wybierz typ</option>
-                        {[...new Set(priceTypes.map(price => price.type))].map((type, index) => (
-                            <option key={index} value={type}>{type}</option>
-                        ))}
-                    </select>
-                </div>
-                <div className="form-group">
                     <label>Kategoria biletu:</label>
                     <select 
                         value={selectedCategory} 
@@ -125,13 +110,13 @@ const PromotionForm = ({ onClose }) => {
                         required
                     >
                         <option value="">Wybierz kategorię</option>
-                        {filteredCategories.map((category, index) => (
+                        {[...new Set(priceTypes.map(price => price.category))].map((category, index) => (
                             <option key={index} value={category}>{category}</option>
                         ))}
                     </select>
                 </div>
                 <div className="form-group">
-                    <label>Wysokość zniżki (% lub kwota):</label>
+                    <label>Wysokość zniżki (%):</label>
                     <input 
                         type="number" 
                         value={discountAmount} 

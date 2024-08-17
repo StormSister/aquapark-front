@@ -17,6 +17,7 @@ const PromotionManager = () => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [searchType, setSearchType] = useState('');
+    const [showTable, setShowTable] = useState(false); // New state for showing table
 
     const handleSearchPromotions = () => {
         const queryParams = {
@@ -32,6 +33,7 @@ const PromotionManager = () => {
         .then(response => {
             console.log(response.data);
             setPromotions(response.data);
+            setShowTable(true); // Show the table when search results are received
         })
         .catch(error => {
             console.error('Error while searching for promotions:', error);
@@ -40,10 +42,12 @@ const PromotionManager = () => {
     };
 
     const handleShowCurrentPromotions = () => {
-        axios.get('http://localhost:8080/promotions/current')
+        axios.get('http://localhost:8080/api/promotions/current')
         .then(response => {
             console.log(response.data);
-            setPromotions(response.data);
+            // Ensure that the response data is an array
+            setPromotions(Array.isArray(response.data) ? response.data : []);
+            setShowTable(true); // Show the table when current promotions are fetched
         })
         .catch(error => {
             console.error('Error while fetching current promotions:', error);
@@ -62,8 +66,7 @@ const PromotionManager = () => {
     return (
         <div className="promotion-manager">
             <h2>Manage Promotions</h2>
-            
-            
+
             <form onSubmit={(e) => { e.preventDefault(); handleSearchPromotions(); }}>
                 <label>
                     Search by Start Date:
@@ -80,32 +83,44 @@ const PromotionManager = () => {
                 <button type="submit">Search Promotions</button>
             </form>
 
-            
             <button onClick={handleShowCurrentPromotions}>Show Current Promotions</button>
             <button onClick={handleOpenAddPromotionForm}>Add Promotion</button>
 
             {showAddForm && <PromotionForm onClose={handleCloseAddForm} />}
 
-          
-            {promotions.length > 0 && (
+            {showTable && promotions.length > 0 && (
                 <div>
                     <h3>Current Promotions:</h3>
-                    <ul>
-                        {promotions.map(promotion => (
-                            <li key={promotion.id}>
-                                <p>Id: {promotion.id}</p>
-                                <p>Start Date: {promotion.startDate}</p>
-                                <p>End Date: {promotion.endDate}</p>
-                                <p>Discount Type: {promotion.discountType}</p>
-                                <p>Discount Amount: {promotion.discountAmount}</p>
-                                <p>Description: {promotion.description}</p>
-                               
-                                {promotion.image && (
-                                    <img src={`data:image/jpeg;base64,${promotion.image}`} alt="Promotion" />
-                                )}
-                            </li>
-                        ))}
-                    </ul>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Discount Type</th>
+                                <th>Discount Amount</th>
+                                <th>Description</th>
+                                <th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {promotions.map(promotion => (
+                                <tr key={promotion.id}>
+                                    <td>{promotion.id}</td>
+                                    <td>{promotion.startDate}</td>
+                                    <td>{promotion.endDate}</td>
+                                    <td>{promotion.discountType}</td>
+                                    <td>{promotion.discountAmount}</td>
+                                    <td>{promotion.description}</td>
+                                    <td>
+                                        {promotion.image && (
+                                            <img src={`data:image/jpeg;base64,${promotion.image}`} alt="Promotion" style={{ width: '100px', height: 'auto' }} />
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
         </div>
@@ -113,5 +128,6 @@ const PromotionManager = () => {
 };
 
 export default PromotionManager;
+
 
 
