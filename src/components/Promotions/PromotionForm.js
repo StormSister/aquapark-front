@@ -1,40 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const PromotionForm = ({ onClose }) => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [discountType, setDiscountType] = useState('');
     const [discountAmount, setDiscountAmount] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
 
+    const [priceTypes, setPriceTypes] = useState([]);
+    const [selectedType, setSelectedType] = useState('');
+    const [filteredCategories, setFilteredCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
+
+    // Pobieranie typów i kategorii cen z endpointu
+    useEffect(() => {
+        const fetchPriceTypes = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/prices');
+                const prices = response.data;
+
+                // Zapisujemy pełną listę cen do priceTypes
+                setPriceTypes(prices);
+            } catch (error) {
+                console.error("Błąd podczas pobierania typów cen:", error);
+            }
+        };
+
+        fetchPriceTypes();
+    }, []);
+
+    // Filtrowanie kategorii na podstawie wybranego typu
+    useEffect(() => {
+        if (selectedType) {
+            // Filtrujemy kategorie dla wybranego typu
+            const categories = [...new Set(priceTypes
+                .filter(price => price.type === selectedType)
+                .map(price => price.category))];
+            setFilteredCategories(categories);
+        } else {
+            setFilteredCategories([]);
+        }
+    }, [selectedType, priceTypes]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        if (!startDate || !endDate) {
-            alert('Please provide both start and end dates.');
+        if (!startDate || !endDate || !selectedType || !selectedCategory) {
+            alert('Proszę wypełnić wszystkie wymagane pola.');
             return;
         }
     
         const formData = new FormData();
         formData.append('startDate', new Date(startDate).toISOString());
         formData.append('endDate', new Date(endDate).toISOString());
-        formData.append('discountType', discountType);
+        formData.append('discountType', selectedType);
         formData.append('discountAmount', discountAmount);
         formData.append('description', description);
+        formData.append('type', selectedType);
+        formData.append('category', selectedCategory);
     
         if (image) {
             formData.append('image', image);
         }
     
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-    
         try {
             const token = localStorage.getItem('accessToken');
-    
             const response = await axios.post('http://localhost:8080/api/promotions/add', formData, {
                 headers: {
                     'Authorization': `${token}`,
@@ -61,6 +92,7 @@ const PromotionForm = ({ onClose }) => {
                         type="date" 
                         value={startDate} 
                         onChange={e => setStartDate(e.target.value)} 
+                        required 
                     />
                 </div>
                 <div className="form-group">
@@ -69,22 +101,42 @@ const PromotionForm = ({ onClose }) => {
                         type="date" 
                         value={endDate} 
                         onChange={e => setEndDate(e.target.value)} 
+                        required 
                     />
                 </div>
                 <div className="form-group">
-                    <label>Rodzaj zniżki:</label>
-                    <input 
-                        type="text" 
-                        value={discountType} 
-                        onChange={e => setDiscountType(e.target.value)} 
-                    />
+                    <label>Typ biletu:</label>
+                    <select 
+                        value={selectedType} 
+                        onChange={e => setSelectedType(e.target.value)}
+                        required
+                    >
+                        <option value="">Wybierz typ</option>
+                        {[...new Set(priceTypes.map(price => price.type))].map((type, index) => (
+                            <option key={index} value={type}>{type}</option>
+                        ))}
+                    </select>
                 </div>
                 <div className="form-group">
-                    <label>Wysokość zniżki (%):</label>
+                    <label>Kategoria biletu:</label>
+                    <select 
+                        value={selectedCategory} 
+                        onChange={e => setSelectedCategory(e.target.value)}
+                        required
+                    >
+                        <option value="">Wybierz kategorię</option>
+                        {filteredCategories.map((category, index) => (
+                            <option key={index} value={category}>{category}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label>Wysokość zniżki (% lub kwota):</label>
                     <input 
                         type="number" 
                         value={discountAmount} 
                         onChange={e => setDiscountAmount(e.target.value)} 
+                        required 
                     />
                 </div>
                 <div className="form-group">
@@ -93,6 +145,7 @@ const PromotionForm = ({ onClose }) => {
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                         rows={4}
+                        required
                     />
                 </div>
                 <div className="form-group">
