@@ -2,23 +2,19 @@ import React from 'react';
 import axios from 'axios';
 import './ManagePrices.css'; 
 
-const token = localStorage.getItem('accessToken');
-console.log(token);
-
-
-  const getHeaders = () => ({
-    headers: {
-      'Authorization': token, 
-      'Content-Type': 'application/json'
-    }
-  
-  });
 
 const DeletePriceButton = ({ priceId, onDelete }) => {
   const handleDelete = async () => {
     try {
+      const token = localStorage.getItem('accessToken');
+      console.log(token);
 
-      const response = await axios.delete(`http://localhost:8080/api/prices/delete/${priceId}`,getHeaders());
+      const response = await axios.delete(`http://localhost:8080/prices/api/delete/${priceId}`, {
+        headers: {
+          'Authorization': `${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
       console.log('Price deleted successfully:', response.data);
       onDelete(); 
     } catch (error) {

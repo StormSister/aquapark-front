@@ -28,6 +28,12 @@ const App = () => {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     const storedEmail = localStorage.getItem('userEmail');
+    const storedRole = localStorage.getItem('userRole'); // Dodaj to dla pełności
+  
+    console.log('Stored Token:', token);
+    console.log('Stored Email:', storedEmail);
+    console.log('Stored Role:', storedRole); // Dodaj to dla pełności
+  
     if (token) {
       try {
         console.log('Odczytany token:', token);
@@ -43,12 +49,21 @@ const App = () => {
       setUserEmail(storedEmail || ''); 
     }
   }, []);
-
   const handleLogin = (token) => {
     try {
       const decoded = jwtDecode(token);
+      console.log('Received Token:', token);
+      console.log('Decoded Token:', decoded);
+  
       localStorage.setItem('accessToken', token);
-      localStorage.setItem('userEmail', decoded.username || ''); 
+      localStorage.setItem('userEmail', decoded.username || '');
+      localStorage.setItem('userRole', decoded.authorities || 'notLoggedIn'); // Dodaj to dla pełności
+  
+      // Logowanie wartości zapisanych w localStorage
+      console.log('LocalStorage after login - Token:', localStorage.getItem('accessToken'));
+      console.log('LocalStorage after login - Email:', localStorage.getItem('userEmail'));
+      console.log('LocalStorage after login - Role:', localStorage.getItem('userRole'));
+  
       setIsLoggedIn(true);
       setUserRole(decoded.authorities || 'notLoggedIn');
       setUserEmail(decoded.username || '');

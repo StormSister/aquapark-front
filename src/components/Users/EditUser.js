@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn, onCancel }) => {
+const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedInRole, onCancel }) => {
   const [editedUser, setEditedUser] = useState({});
 
   useEffect(() => {
@@ -28,12 +28,29 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn, onCancel }) =>
   };
 
   const handleCancel = () => {
-    onCancel(); // Wywołujemy funkcję anulowania przekazaną jako props
+    onCancel(); 
   };
 
+  // Check if the current user can change the password
   const canChangePassword = () => {
-    return isLoggedIn && (isLoggedIn.role === 'manager' || (isLoggedIn.role !== 'manager' && editedUser.id === isLoggedIn.id));
+    const loggedInUserEmail = localStorage.getItem('userEmail');
+    console.log('Logged in user email:', loggedInUserEmail); // Debugging
+    console.log('Edited user email:', editedUser.email); // Debugging
+    // Password can only be changed if editing own account or role is manager
+    return (loggedInUserEmail === editedUser.email);
   };
+
+  // Check if the current user can edit the role
+  const canEditRole = () => {
+    console.log('User role:', isLoggedInRole); // Debugging
+    return isLoggedInRole === 'manager';
+  };
+
+  // Log the role and user info for debugging
+  useEffect(() => {
+    console.log('User role in EditUser:', isLoggedInRole);
+    console.log('Current user from props:', user);
+  }, [isLoggedInRole, user]);
 
   if (!user) {
     return <div>Loading...</div>; 
@@ -44,10 +61,10 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn, onCancel }) =>
       <h2>Edit User</h2>
       <form onSubmit={handleSubmit}>
         <label>Email:</label>
-        <input type="text" name="email" value={editedUser.email || ''} onChange={handleChange} />
+        <input type="text" name="email" value={editedUser.email || ''} onChange={handleChange} disabled />
         <br />
         <label>Username:</label>
-        <input type="text" name="username" value={editedUser.username || ''} onChange={handleChange} />
+        <input type="text" name="username" value={editedUser.username || ''} onChange={handleChange} disabled />
         <br />
         <label>First Name:</label>
         <input type="text" name="firstName" value={editedUser.firstName || ''} onChange={handleChange} />
@@ -58,6 +75,13 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn, onCancel }) =>
         <label>Phone Number:</label>
         <input type="text" name="phoneNumber" value={editedUser.phoneNumber || ''} onChange={handleChange} />
         <br />
+        {canEditRole() && (
+          <>
+            <label>Role:</label>
+            <input type="text" name="role" value={editedUser.role || ''} onChange={handleChange} />
+            <br />
+          </>
+        )}
         {canChangePassword() && (
           <>
             <label>Password:</label>
@@ -65,22 +89,12 @@ const EditUser = ({ user, onUpdateUser, onDeleteUser, isLoggedIn, onCancel }) =>
             <br />
           </>
         )}
-        {isLoggedIn && (isLoggedIn.role === 'worker' || isLoggedIn.role === 'client') && (
-          <>
-            <label>Role:</label>
-            <input type="text" name="role" value={editedUser.role || ''} readOnly />
-            <br />
-          </>
-        )}
         <button type="submit">Update</button>
         <button type="button" onClick={handleDelete}>Delete</button>
-        <button type="button" onClick={handleCancel}>Close</button>
+        <button type="button" onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   );
 };
 
 export default EditUser;
-
-
-

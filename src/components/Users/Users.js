@@ -3,8 +3,6 @@ import axios from 'axios';
 import UsersList from './UsersList';
 import EditUser from './EditUser';
 
-const token = localStorage.getItem('accessToken');
-
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -17,44 +15,37 @@ const Users = () => {
     role: ''
   });
   const [loadedAllUsers, setLoadedAllUsers] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null); // Wybrany użytkownik do edycji
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [userRole, setUserRole] = useState('notLoggedIn');
 
   useEffect(() => {
-    if (loadedAllUsers) {
-      fetchAllUsers();
-    }
-  }, [loadedAllUsers]);
-
-  useEffect(() => {
-    fetchAllUsers(); 
+    // Pobieranie roli użytkownika z localStorage
+    const storedUserRole = localStorage.getItem('userRole') || 'notLoggedIn';
+    console.log('Stored User Role:', storedUserRole); // Debugging
+    setUserRole(storedUserRole);
+    fetchAllUsers();
   }, []);
 
   const fetchAllUsers = async () => {
     try {
-     
       const token = localStorage.getItem('accessToken');
-      console.log('Token used for request:', token);
-  
-      
+      console.log('Access Token from localStorage:', token); // Debugging
       const response = await axios.get('http://localhost:8080/api/users', {
         headers: {
-          'Authorization': `${token}`, 
+          'Authorization': `${token}`,
           'Content-Type': 'application/json'
         }
-        
       });
-  
-      console.log('Fetched all users:', response.data); // Log response data
       setUsers(response.data);
     } catch (error) {
-      console.error('Error fetching users:', error); // Log error
-      console.log('Error details:', error.response ? error.response.data : error.message); // Log more details
+      console.error('Error fetching users:', error);
     }
   };
+
   const handleShowAllUsers = () => {
     setFilteredUsers([]);
     setLoadedAllUsers(true);
-    setSelectedUser(null); // Resetujemy wybranego użytkownika
+    setSelectedUser(null);
   };
 
   const handleSearch = async () => {
@@ -67,24 +58,24 @@ const Users = () => {
         phoneNumber: searchParams.phoneNumber || undefined,
         role: searchParams.role || undefined
       };
-  
-      // Remove undefined values from query
+
       const filteredQuery = Object.fromEntries(
         Object.entries(query).filter(([_, v]) => v !== undefined)
       );
-  
-      const response = await axios.get(`http://localhost:8080/api/search`, {
+
+      const token = localStorage.getItem('accessToken');
+      console.log('Access Token from localStorage for search:', token); // Debugging
+      const response = await axios.get('http://localhost:8080/api/search', {
         headers: {
-          'Authorization': `${token}`, 
+          'Authorization': `${token}`,
           'Content-Type': 'application/json'
         },
         params: filteredQuery
       });
-  
-      console.log('Search results:', response.data);
+
       setFilteredUsers(response.data);
       setLoadedAllUsers(false);
-      setSelectedUser(null); // Resetujemy wybranego użytkownika
+      setSelectedUser(null);
     } catch (error) {
       console.error('Error searching users:', error);
     }
@@ -105,47 +96,33 @@ const Users = () => {
     });
     setFilteredUsers([]);
     setLoadedAllUsers(false);
-    setSelectedUser(null); // Resetujemy wybranego użytkownika
+    setSelectedUser(null);
   };
 
   const handleUserSelect = (userId) => {
-    console.log(`Selected user with ID: ${userId}`);
-    console.log('Users:', users); // Sprawdzenie, czy users jest ustawione przed wyszukiwaniem
     const user = users.find(user => user.id === userId);
-    console.log('Selected user:', user); // Sprawdzenie, czy użytkownik został znaleziony
-    setSelectedUser(user); // Ustawienie wybranego użytkownika po kliknięciu
+    setSelectedUser(user);
   };
 
   const handleUpdateUser = async (updatedUser) => {
-    try {const handleUpdateUser = async (updatedUser) => {
-      try {
-        // Usuwanie pól o wartości null lub pustej
-        const cleanedUser = Object.keys(updatedUser).reduce((acc, key) => {
-          if (updatedUser[key] !== null && updatedUser[key] !== '') {
-            acc[key] = updatedUser[key];
-          }
-          return acc;
-        }, {});
-    
-        const response = await axios.put(`http://localhost:8080/api/users/${updatedUser.id}`, cleanedUser);
-        console.log('Updated user:', response.data);
-        fetchAllUsers();
-        setSelectedUser(null); 
-      } catch (error) {
-        console.error('Error updating user:', error);
-      }
-    };
+    try {
+      const token = localStorage.getItem('accessToken');
+      console.log('Access Token from localStorage for update:', token); // Debugging
       const cleanedUser = Object.keys(updatedUser).reduce((acc, key) => {
         if (updatedUser[key] !== null && updatedUser[key] !== '') {
           acc[key] = updatedUser[key];
         }
         return acc;
       }, {});
-  
-      const response = await axios.put(`http://localhost:8080/api/users/${updatedUser.id}`, cleanedUser);
-      console.log('Updated user:', response.data);
+
+      await axios.put(`http://localhost:8080/api/users/${updatedUser.id}`, cleanedUser, {
+        headers: {
+          'Authorization': `${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
       fetchAllUsers();
-      setSelectedUser(null); 
+      setSelectedUser(null);
     } catch (error) {
       console.error('Error updating user:', error);
     }
@@ -153,10 +130,15 @@ const Users = () => {
 
   const handleDeleteUser = async (userId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/users/${userId}`);
-      console.log('Deleted user with ID:', userId);
+      const token = localStorage.getItem('accessToken');
+      console.log('Access Token from localStorage for delete:', token); // Debugging
+      await axios.delete(`http://localhost:8080/api/users/${userId}`, {
+        headers: {
+          'Authorization': `${token}`
+        }
+      });
       fetchAllUsers();
-      setSelectedUser(null); 
+      setSelectedUser(null);
     } catch (error) {
       console.error('Error deleting user:', error);
     }
@@ -182,6 +164,8 @@ const Users = () => {
           user={selectedUser}
           onUpdateUser={handleUpdateUser}
           onDeleteUser={handleDeleteUser}
+          isLoggedInRole={userRole} // Przekazanie roli użytkownika
+          onCancel={() => setSelectedUser(null)}
         />
       ) : (
         (users.length > 0 || filteredUsers.length > 0) && (
@@ -193,5 +177,3 @@ const Users = () => {
 };
 
 export default Users;
-
-

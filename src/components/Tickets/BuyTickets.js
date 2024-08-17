@@ -1,106 +1,106 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as yup from 'yup';
-import { useStripe, useElements } from '@stripe/react-stripe-js';
+import { useStripe } from '@stripe/react-stripe-js';
 
 const BuyTickets = () => {
     const navigate = useNavigate();
     const stripe = useStripe();
-    const elements = useElements();
-
-    const schema = yup.object().shape({
-        email: yup.string().email().required(),
-        adults: yup.number().min(0).integer().required(),
-        children: yup.number().min(0).integer().required(),
-    }).test('sum-validation', 'Musisz wybrać co najmniej jedną osobę (dorosłego lub dziecko)', function(values) {
-        const { adults, children } = values;
-        return adults > 0 || children > 0;
-    }).required();
 
     const [email, setEmail] = useState('');
-    const [adults, setAdults] = useState(0);
-    const [children, setChildren] = useState(0);
-    const [isGroup, setIsGroup] = useState(false);
-    const [message, setMessage] = useState('');
-    const [errors, setErrors] = useState(null);
-    const [adultPrice, setAdultPrice] = useState(0);
-    const [childPrice, setChildPrice] = useState(0);
+    const [ticketTypes, setTicketTypes] = useState([]);
+    const [ticketQuantities, setTicketQuantities] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
-
-    const calculateTotalPrice = (adults, children, adultPrice, childPrice) => {
-        return (adults * adultPrice) + (children * childPrice);
-    };
+    const [message, setMessage] = useState('');
+    const [isGroup, setIsGroup] = useState(false);
 
     useEffect(() => {
-        const fetchPrices = async () => {
+        const fetchTicketTypes = async () => {
             try {
-                const response = await fetch('http://localhost:8080/prices');
+                const response = await fetch('http://localhost:8080/tickets/ticket-types');
                 const data = await response.json();
-
-                const adultPrice = data.find(price => price.type === 'Ticket' && price.category === 'Standard')?.price || 0;
-                const childPrice = data.find(price => price.type === 'Ticket' && price.category === 'Child')?.price || 0;
-
-                setAdultPrice(adultPrice);
-                setChildPrice(childPrice);
-                setTotalPrice(calculateTotalPrice(adults, children, adultPrice, childPrice));
+                console.log('Fetched ticket types:', data);
+                setTicketTypes(data);
             } catch (error) {
-                console.error("Error fetching prices:", error);
+                console.error("Error fetching ticket types:", error);
             }
         };
 
-        fetchPrices();
-    }, [adults, children]);
+        fetchTicketTypes();
+    }, []);
 
     useEffect(() => {
-        setTotalPrice(calculateTotalPrice(adults, children, adultPrice, childPrice));
-    }, [adults, children, adultPrice, childPrice]);
+        console.log('Current ticket types:', ticketTypes);
+        console.log('Current ticket quantities:', ticketQuantities);
+
+        let total = 0;
+        ticketTypes.forEach(ticket => {
+            const quantity = ticketQuantities[`${ticket.category}-${ticket.type}`] || 0;
+            total += quantity * ticket.price;
+        });
+        setTotalPrice(total);
+        console.log('Calculated total price:', total);
+    }, [ticketQuantities, ticketTypes]);
+
+    const handleQuantityChange = (category, type, quantity) => {
+        const key = `${category}-${type}`;
+        const validQuantity = Math.max(Number(quantity) || 0, 0);
+        setTicketQuantities(prev => {
+            const updatedQuantities = { ...prev, [key]: validQuantity };
+            console.log('Updated ticket quantities:', updatedQuantities);
+            return updatedQuantities;
+        });
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+    
+        const excursionTicket = ticketTypes.find(ticket => ticket.category === 'Excursion');
+        const excursionQuantity = ticketQuantities[`${excursionTicket?.category}-${excursionTicket?.type}`] || 0;
+    
+        if (excursionTicket && excursionQuantity > 0 && excursionQuantity < 20) {
+            setMessage('Aby wybrać bilet typu Excursion, musi być co najmniej 20 osób.');
+            return;
+        }
+    
         try {
-            const requestData = { email, adults, children, isGroup };
-            await schema.validate(requestData, { abortEarly: false });
-
+            const requestData = {
+                email,
+                ticketDetails: ticketTypes.map(ticket => ({
+                    type: ticket.type,
+                    category: ticket.category,
+                    quantity: ticketQuantities[`${ticket.category}-${ticket.type}`] || 0
+                })).filter(ticket => ticket.quantity > 0),
+                isGroup
+            };
+    
+            console.log("Sending request data:", requestData);
+    
+        
             const response = await fetch('http://localhost:8080/create-checkout-session', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    totalPrice: totalPrice * 100,
-                    paymentType: 'ticket'
+                    totalPrice: totalPrice * 100, 
+                    paymentType: 'ticket', 
                 }),
             });
-
-            if (!response.ok) {
-                throw new Error('Failed to create checkout session');
-            }
-
+    
             const { sessionId } = await response.json();
-
-            localStorage.setItem('ticketData', JSON.stringify({ email, adults, children, isGroup }));
+            localStorage.setItem('ticketData', JSON.stringify(requestData)); 
             localStorage.setItem('sessionId', sessionId);
-            localStorage.setItem('paymentType', 'ticket');
-
+            localStorage.setItem('paymentType', 'ticket'); 
             const { error } = await stripe.redirectToCheckout({ sessionId });
-
+    
             if (error) {
                 console.error('Error redirecting to checkout:', error);
                 setMessage('An error occurred while redirecting to checkout.');
             }
-
+    
         } catch (error) {
-            if (error.name === 'ValidationError') {
-                const validationErrors = {};
-                error.inner.forEach(err => {
-                    validationErrors[err.path] = err.message;
-                });
-                setErrors(validationErrors);
-            } else {
-                console.error('Error submitting form:', error);
-                setMessage('An error occurred while processing your request.');
-            }
+            console.error('Error submitting form:', error);
+            setMessage('An error occurred while processing your request.');
         }
     };
 
@@ -108,7 +108,6 @@ const BuyTickets = () => {
         <div>
             <h1>Purchase Tickets</h1>
             <form onSubmit={handleSubmit}>
-                {/* Formularz */}
                 <div>
                     <label>Email:</label>
                     <input
@@ -117,30 +116,18 @@ const BuyTickets = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
-                    {errors && errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
                 </div>
-                <div>
-                    <label>Adults (Price: {adultPrice}):</label>
-                    <input
-                        type="number"
-                        value={adults}
-                        onChange={(e) => setAdults(Number(e.target.value))}
-                        min="0"
-                        required
-                    />
-                    {errors && errors.adults && <p style={{ color: 'red' }}>{errors.adults}</p>}
-                </div>
-                <div>
-                    <label>Children (Price: {childPrice}):</label>
-                    <input
-                        type="number"
-                        value={children}
-                        onChange={(e) => setChildren(Number(e.target.value))}
-                        min="0"
-                        required
-                    />
-                    {errors && errors.children && <p style={{ color: 'red' }}>{errors.children}</p>}
-                </div>
+                {ticketTypes.map((ticket, index) => (
+                    <div key={`${ticket.category}-${ticket.type}-${index}`}>
+                        <label>{`${ticket.category} Ticket (Price: ${ticket.price})`}:</label>
+                        <input
+                            type="number"
+                            value={ticketQuantities[`${ticket.category}-${ticket.type}`] || 0}
+                            onChange={(e) => handleQuantityChange(ticket.category, ticket.type, e.target.value)}
+                            min="0"
+                        />
+                    </div>
+                ))}
                 <div>
                     <label>
                         <input
@@ -148,21 +135,17 @@ const BuyTickets = () => {
                             checked={isGroup}
                             onChange={(e) => setIsGroup(e.target.checked)}
                         />
-                        Group Ticket
+                       Put all quests on one ticket
                     </label>
                 </div>
-
                 <div>
-                    <h3>Total Price: {totalPrice}</h3>
+                    <h3>Total Price: {totalPrice.toFixed(2)}</h3>
                 </div>
-
                 <button type="submit" disabled={!stripe}>Purchase</button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <p style={{ color: 'red' }}>{message}</p>}
         </div>
     );
 };
 
 export default BuyTickets;
-
-

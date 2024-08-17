@@ -9,29 +9,32 @@ const EditPriceForm = ({ price, onClose }) => {
   const [editedPrice, setEditedPrice] = useState(price.price);
 
 
-  const token = localStorage.getItem('accessToken');
-
-
-  const getHeaders = () => ({
-    headers: {
-      'Authorization': token, 
-      'Content-Type': 'application/json'
-    }
-  });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('accessToken');
+      console.log(token);
+
+    
       const updatedData = {
         type,
         category,
         price: parseFloat(editedPrice) 
       };
 
-      const response = await axios.put(`http://localhost:8080/api/prices/update/${price.id}`, getHeaders(), updatedData);
+      const response = await axios.put(
+        `http://localhost:8080/prices/api/update/${price.id}`,
+        updatedData, 
+        {
+          headers: {
+            'Authorization': `${token}`, 
+            'Content-Type': 'application/json'
+          }
+        }
+      );
       console.log('Price updated successfully:', response.data);
       
-      onClose(); // Zamknięcie formularza po pomyślnym zaktualizowaniu ceny
+      onClose(); 
     } catch (error) {
       console.error('Error updating price:', error);
     }

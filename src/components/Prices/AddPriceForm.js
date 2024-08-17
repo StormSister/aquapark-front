@@ -8,11 +8,12 @@ const AddPriceForm = ({ onClose, onAdd }) => {
 
  
   const token = localStorage.getItem('accessToken');
+  console.log(token);
 
  
   const getHeaders = () => ({
     headers: {
-      'Authorization': token, // Dodanie tokenu do nagłówka
+      'Authorization': `${token}`, 
       'Content-Type': 'application/json'
     }
   });
@@ -21,19 +22,17 @@ const AddPriceForm = ({ onClose, onAdd }) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/prices/add', 
+        'http://localhost:8080/prices/api/add',
         {
           type,
           category,
           price: parseFloat(price)
         },
-        getHeaders() // Dodanie nagłówków do zapytania
+        getHeaders()  // Use getHeaders to pass headers
       );
       console.log('Price added successfully:', response.data);
-      onAdd(); // Wywołanie funkcji onAdd przekazanej jako props po pomyślnym dodaniu ceny
-      onClose(); // Zamknięcie formularza
-      
-      // Opcjonalnie, zresetowanie pól formularza
+      onAdd(); 
+      onClose();
       setType('');
       setCategory('');
       setPrice('');
@@ -41,6 +40,7 @@ const AddPriceForm = ({ onClose, onAdd }) => {
       console.error('Error adding price:', error);
     }
   };
+  
 
   return (
     <div className="form-container">
