@@ -10,9 +10,11 @@ const PromotionBanner = () => {
 
     const fetchCurrentPromotions = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/promotions/current');
+            const response = await axios.get('http://localhost:8080/promotions/current');
             if (Array.isArray(response.data)) {
-                setCurrentPromotions(response.data);  // Ensure it's an array before setting state
+                setCurrentPromotions(response.data);  
+                console.log(response.data);
+                console.log(currentPromotions);
             } else {
                 console.error('Expected an array of promotions, but got:', response.data);
             }

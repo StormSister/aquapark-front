@@ -8,70 +8,104 @@ const PromotionForm = ({ onClose }) => {
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
 
-    const [priceTypes, setPriceTypes] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [filteredCategories, setFilteredCategories] = useState([]);
+    const [allData, setAllData] = useState([]);
+    const [types, setTypes] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedType, setSelectedType] = useState('');
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
-    // Pobieranie typów i kategorii cen z endpointu
     useEffect(() => {
-        const fetchPriceTypes = async () => {
+        const fetchData = async () => {
             try {
                 const response = await axios.get('http://localhost:8080/prices');
-                const prices = response.data;
+                setAllData(response.data);
 
-                // Zapisujemy pełną listę cen do priceTypes
-                setPriceTypes(prices);
+                // Get unique types
+                const uniqueTypes = [...new Set(response.data.map(item => item.type))];
+                setTypes(uniqueTypes);
+                console.log('Fetched all data:', response.data);
+                console.log('Unique types:', uniqueTypes);
             } catch (error) {
-                console.error("Błąd podczas pobierania typów cen:", error);
+                console.error("Błąd podczas pobierania danych:", error);
             }
         };
-
-        fetchPriceTypes();
+        fetchData();
     }, []);
 
-    // Filtrowanie kategorii na podstawie wybranego typu
     useEffect(() => {
-        if (selectedCategory) {
-            // Filtrujemy kategorie dla wybranego typu
-            const categories = [...new Set(priceTypes
-                .filter(price => price.category === selectedCategory)
-                .map(price => price.category))];
-            setFilteredCategories(categories);
+        if (selectedType) {
+            // Filter categories based on selected type
+            const filteredCategories = allData
+                .filter(item => item.type === selectedType)
+                .map(item => item.category);
+            const uniqueCategories = [...new Set(filteredCategories)]; // Unique categories
+            setCategories(uniqueCategories);
+            console.log('Filtered categories:', filteredCategories);
+            console.log('Unique categories:', uniqueCategories);
         } else {
-            setFilteredCategories([]);
+            setCategories([]);
         }
-    }, [selectedCategory, priceTypes]);
+    }, [selectedType, allData]);
+
+    const handleTypeChange = (e) => {
+        const newType = e.target.value;
+        setSelectedType(newType);
+        setSelectedCategories([]); // Reset selected categories when type changes
+        console.log('Selected type:', newType);
+    };
+
+    const handleCategoryChange = (category) => {
+        const updatedCategories = selectedCategories.includes(category)
+            ? selectedCategories.filter((c) => c !== category)
+            : [...selectedCategories, category];
+        setSelectedCategories(updatedCategories);
+        console.log('Updated selected categories:', updatedCategories);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        if (!startDate || !endDate || !selectedCategory) {
+
+        if (!startDate || !endDate || selectedCategories.length === 0) {
             alert('Proszę wypełnić wszystkie wymagane pola.');
             return;
         }
-    
+
         const formData = new FormData();
         formData.append('startDate', new Date(startDate).toISOString());
         formData.append('endDate', new Date(endDate).toISOString());
-        formData.append('discountType', selectedCategory); // Przekazywanie category jako discountType
         formData.append('discountAmount', discountAmount);
         formData.append('description', description);
-        formData.append('category', selectedCategory);
-    
+
+        // Convert the list of selected categories to a JSON string
+        const categoriesJson = JSON.stringify(selectedCategories);
+        formData.append('categories', categoriesJson);
+
         if (image) {
             formData.append('image', image);
         }
-    
+
+        console.log('FormData contents before sending:');
+        formData.forEach((value, key) => {
+            console.log(key, value);
+        });
+
         try {
+            console.log('FormData contents before sending:');
+    for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+            console.log(`${key}: [File: ${value.name}, size: ${value.size} bytes]`);
+        } else {
+            console.log(`${key}: ${value}`);
+        }
+    }
             const token = localStorage.getItem('accessToken');
-            const response = await axios.post('http://localhost:8080/api/promotions/add', formData, {
+            const response = await axios.post('http://localhost:8080/promotions/api/add', formData, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data' 
+                    'Authorization': `${token}`,
+                    'Content-Type': 'multipart/form-data'
                 }
             });
-    
-            console.log('Response from server:', response.data);
+
             alert('Promocja została dodana!');
             onClose();
         } catch (error) {
@@ -103,18 +137,34 @@ const PromotionForm = ({ onClose }) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Kategoria biletu:</label>
-                    <select 
-                        value={selectedCategory} 
-                        onChange={e => setSelectedCategory(e.target.value)}
-                        required
-                    >
-                        <option value="">Wybierz kategorię</option>
-                        {[...new Set(priceTypes.map(price => price.category))].map((category, index) => (
-                            <option key={index} value={category}>{category}</option>
+                    <label>Typ:</label>
+                    <select value={selectedType} onChange={handleTypeChange} required>
+                        <option value="">Wybierz typ</option>
+                        {types.map((type, index) => (
+                            <option key={index} value={type}>
+                                {type}
+                            </option>
                         ))}
                     </select>
                 </div>
+                {selectedType && (
+                    <div className="form-group">
+                        <label>Kategorie:</label>
+                        {categories.map((category, index) => (
+                            <div key={index}>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        value={category}
+                                        checked={selectedCategories.includes(category)}
+                                        onChange={() => handleCategoryChange(category)}
+                                    />
+                                    {category}
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                )}
                 <div className="form-group">
                     <label>Wysokość zniżki (%):</label>
                     <input 

@@ -2,9 +2,23 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import QrReader from 'react-qr-scanner';
 
+
+
 const CheckTickets = () => {
     const [message, setMessage] = useState('');
     const [scannerEnabled, setScannerEnabled] = useState(false);
+
+    const token = localStorage.getItem('accessToken');
+
+const getHeaders = () => ({
+    headers: {
+        'Authorization': `${token}`,
+        'Content-Type': 'application/json'
+    }
+});
+console.log(getHeaders());
+
+
 
     const handleScan = async (data) => {
         if (data) {
@@ -14,10 +28,13 @@ const CheckTickets = () => {
             try {
                 // Wyłącz skaner od razu po odczytaniu kodu QR
                 setScannerEnabled(false);
+                
 
-                const response = await axios.post('http://localhost:8080/tickets/api/check-qr', { qrCode: data.text });
-                console.log('Response from server:', response);
+                const response = await axios.post('http://localhost:8080/tickets/api/check-qr', getHeaders(),
+                    { qrCode: data.text });
+                
                 setMessage(response.data);
+                console.log('Response from server:', JSON.stringify(response.data, null, 2));
             } catch (error) {
                 console.error('Failed to send QR code to server:', error);
                 setMessage('Failed to scan QR code. Please try again.');
