@@ -35,7 +35,7 @@ const BuyTickets = () => {
         let total = 0;
         ticketTypes.forEach(ticket => {
             const quantity = ticketQuantities[`${ticket.category}-${ticket.type}`] || 0;
-            total += quantity * ticket.price;
+            total += quantity * ticket.finalPrice;
         });
         setTotalPrice(total);
         console.log('Calculated total price:', total);
@@ -53,15 +53,15 @@ const BuyTickets = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-    
+
         const excursionTicket = ticketTypes.find(ticket => ticket.category === 'Excursion');
         const excursionQuantity = ticketQuantities[`${excursionTicket?.category}-${excursionTicket?.type}`] || 0;
-    
+
         if (excursionTicket && excursionQuantity > 0 && excursionQuantity < 20) {
             setMessage('Aby wybrać bilet typu Excursion, musi być co najmniej 20 osób.');
             return;
         }
-    
+
         try {
             const requestData = {
                 email,
@@ -72,10 +72,9 @@ const BuyTickets = () => {
                 })).filter(ticket => ticket.quantity > 0),
                 isGroup
             };
-    
+
             console.log("Sending request data:", requestData);
-    
-        
+
             const response = await fetch('http://localhost:8080/create-checkout-session', {
                 method: 'POST',
                 headers: {
@@ -86,18 +85,18 @@ const BuyTickets = () => {
                     paymentType: 'ticket', 
                 }),
             });
-    
+
             const { sessionId } = await response.json();
             localStorage.setItem('ticketData', JSON.stringify(requestData)); 
             localStorage.setItem('sessionId', sessionId);
             localStorage.setItem('paymentType', 'ticket'); 
             const { error } = await stripe.redirectToCheckout({ sessionId });
-    
+
             if (error) {
                 console.error('Error redirecting to checkout:', error);
                 setMessage('An error occurred while redirecting to checkout.');
             }
-    
+
         } catch (error) {
             console.error('Error submitting form:', error);
             setMessage('An error occurred while processing your request.');
@@ -119,7 +118,21 @@ const BuyTickets = () => {
                 </div>
                 {ticketTypes.map((ticket, index) => (
                     <div key={`${ticket.category}-${ticket.type}-${index}`}>
-                        <label>{`${ticket.category} Ticket (Price: ${ticket.price})`}:</label>
+                        <label>
+                            {`${ticket.category} Ticket:`}
+                            {ticket.isPromotion ? (
+                                <>
+                                    <span style={{ textDecoration: 'line-through', marginRight: '10px' }}>
+                                        {ticket.standardPrice.toFixed(2)}
+                                    </span>
+                                    <span style={{ color: 'red' }}>
+                                        {ticket.finalPrice.toFixed(2)} PROMOTION
+                                    </span>
+                                </>
+                            ) : (
+                                <span>{ticket.finalPrice.toFixed(2)}</span>
+                            )}
+                        </label>
                         <input
                             type="number"
                             value={ticketQuantities[`${ticket.category}-${ticket.type}`] || 0}
@@ -135,7 +148,7 @@ const BuyTickets = () => {
                             checked={isGroup}
                             onChange={(e) => setIsGroup(e.target.checked)}
                         />
-                       Put all quests on one ticket
+                       Put all guests on one ticket
                     </label>
                 </div>
                 <div>
@@ -149,3 +162,4 @@ const BuyTickets = () => {
 };
 
 export default BuyTickets;
+
