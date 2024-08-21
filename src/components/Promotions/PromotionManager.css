@@ -1,0 +1,72 @@
+.promotion-manager {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.promotion-manager h2 {
+    margin-bottom: 20px;
+}
+
+.promotion-manager form {
+    margin-bottom: 20px;
+}
+
+.promotion-manager label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.promotion-manager input[type="date"],
+.promotion-manager input[type="text"] {
+    padding: 8px;
+    margin-left: 10px;
+}
+
+.promotion-manager button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #007bff;
+    cursor: pointer;
+}
+
+.promotion-manager button:hover {
+    background-color: #0056b3;
+}
+
+/* Table Styles */
+.promotion-manager table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.promotion-manager th, .promotion-manager td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.promotion-manager th {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
+.promotion-manager tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.promotion-manager tr:hover {
+    background-color: #e1e1e1;
+}
+
+.promotion-manager img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 4px;
+    object-fit: cover;
+}

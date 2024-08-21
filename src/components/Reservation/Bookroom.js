@@ -41,7 +41,7 @@ const ReservationForm = () => {
 
         Object.values(newSelectedRooms).forEach(room => {
             const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)-1);
-            newTotalPrice += room.price * room.quantity * days;
+            newTotalPrice += room.finalPrice * room.quantity * days;
             totalCapacity += room.capacity * room.quantity;
         });
 
@@ -64,6 +64,7 @@ const ReservationForm = () => {
                 }
             });
             setAvailableRooms(response.data);
+            console.log(response.data);
         } catch (error) {
             console.error('Error fetching available rooms', error);
         }

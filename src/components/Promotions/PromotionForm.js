@@ -4,6 +4,8 @@ import axios from 'axios';
 const PromotionForm = ({ onClose }) => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [displayStartDate, setDisplayStartDate] = useState('');
+    const [displayEndDate, setDisplayEndDate] = useState('');
     const [discountAmount, setDiscountAmount] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
@@ -26,7 +28,7 @@ const PromotionForm = ({ onClose }) => {
                 console.log('Fetched all data:', response.data);
                 console.log('Unique types:', uniqueTypes);
             } catch (error) {
-                console.error("Błąd podczas pobierania danych:", error);
+                console.error("Error fetching data:", error);
             }
         };
         fetchData();
@@ -64,40 +66,34 @@ const PromotionForm = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!startDate || !endDate || selectedCategories.length === 0) {
-            alert('Proszę wypełnić wszystkie wymagane pola.');
+    
+        if (!startDate || !endDate || !displayStartDate || !displayEndDate || selectedCategories.length === 0) {
+            alert('Please fill in all required fields.');
             return;
         }
-
+    
         const formData = new FormData();
         formData.append('startDate', new Date(startDate).toISOString());
         formData.append('endDate', new Date(endDate).toISOString());
+        formData.append('startDisplay', new Date(displayStartDate).toISOString());
+        formData.append('endDisplay', new Date(displayEndDate).toISOString());
         formData.append('discountAmount', discountAmount);
         formData.append('description', description);
-
+    
         // Convert the list of selected categories to a JSON string
         const categoriesJson = JSON.stringify(selectedCategories);
         formData.append('categories', categoriesJson);
-
+    
         if (image) {
             formData.append('image', image);
         }
-
+    
         console.log('FormData contents before sending:');
         formData.forEach((value, key) => {
             console.log(key, value);
         });
-
+    
         try {
-            console.log('FormData contents before sending:');
-    for (const [key, value] of formData.entries()) {
-        if (value instanceof File) {
-            console.log(`${key}: [File: ${value.name}, size: ${value.size} bytes]`);
-        } else {
-            console.log(`${key}: ${value}`);
-        }
-    }
             const token = localStorage.getItem('accessToken');
             const response = await axios.post('http://localhost:8080/promotions/api/add', formData, {
                 headers: {
@@ -105,21 +101,24 @@ const PromotionForm = ({ onClose }) => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-
-            alert('Promocja została dodana!');
+    
+            alert('Promotion has been added!');
             onClose();
         } catch (error) {
-            console.error('Błąd podczas dodawania promocji:', error);
-            alert('Wystąpił błąd podczas dodawania promocji!');
+            console.error('Error adding promotion:', error);
+            alert('An error occurred while adding the promotion!');
         }
     };
 
+
+
+
     return (
         <div className="promotion-form">
-            <h2>Dodaj nową promocję</h2>
+            <h2>Add New Promotion</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label>Data rozpoczęcia:</label>
+                    <label>Start Date:</label>
                     <input 
                         type="date" 
                         value={startDate} 
@@ -128,7 +127,7 @@ const PromotionForm = ({ onClose }) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Data zakończenia:</label>
+                    <label>End Date:</label>
                     <input 
                         type="date" 
                         value={endDate} 
@@ -137,9 +136,27 @@ const PromotionForm = ({ onClose }) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Typ:</label>
+                    <label>Display Start Date:</label>
+                    <input 
+                        type="date" 
+                        value={displayStartDate} 
+                        onChange={e => setDisplayStartDate(e.target.value)} 
+                        required 
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Display End Date:</label>
+                    <input 
+                        type="date" 
+                        value={displayEndDate} 
+                        onChange={e => setDisplayEndDate(e.target.value)} 
+                        required 
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Type:</label>
                     <select value={selectedType} onChange={handleTypeChange} required>
-                        <option value="">Wybierz typ</option>
+                        <option value="">Select Type</option>
                         {types.map((type, index) => (
                             <option key={index} value={type}>
                                 {type}
@@ -149,7 +166,7 @@ const PromotionForm = ({ onClose }) => {
                 </div>
                 {selectedType && (
                     <div className="form-group">
-                        <label>Kategorie:</label>
+                        <label>Categories:</label>
                         {categories.map((category, index) => (
                             <div key={index}>
                                 <label>
@@ -166,7 +183,7 @@ const PromotionForm = ({ onClose }) => {
                     </div>
                 )}
                 <div className="form-group">
-                    <label>Wysokość zniżki (%):</label>
+                    <label>Discount Amount (%):</label>
                     <input 
                         type="number" 
                         value={discountAmount} 
@@ -175,7 +192,7 @@ const PromotionForm = ({ onClose }) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Opis promocji:</label>
+                    <label>Description:</label>
                     <textarea
                         value={description}
                         onChange={e => setDescription(e.target.value)}
@@ -184,7 +201,7 @@ const PromotionForm = ({ onClose }) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Załaduj zdjęcie:</label>
+                    <label>Upload Image:</label>
                     <input 
                         type="file" 
                         accept="image/*"
@@ -192,8 +209,8 @@ const PromotionForm = ({ onClose }) => {
                     />
                 </div>
                 <div className="form-actions">
-                    <button type="submit">Dodaj promocję</button>
-                    <button type="button" onClick={onClose}>Anuluj</button>
+                    <button type="submit">Add Promotion</button>
+                    <button type="button" onClick={onClose}>Cancel</button>
                 </div>
             </form>
         </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import PromotionForm from './PromotionForm';
+import './PromotionManager.css'; // Import your CSS file
 
 const token = localStorage.getItem('accessToken');
 
@@ -42,7 +43,7 @@ const PromotionManager = () => {
     };
 
     const handleShowCurrentPromotions = () => {
-        axios.get('http://localhost:8080/api/promotions/current')
+        axios.get('http://localhost:8080/promotions/current')
         .then(response => {
             console.log(response.data);
             // Ensure that the response data is an array
@@ -59,7 +60,7 @@ const PromotionManager = () => {
         setShowAddForm(true);
     };
 
-    const handleCloseAddForm = () => {
+    const handleCloseAddPromotionForm = () => {
         setShowAddForm(false);
     };
 
@@ -86,7 +87,7 @@ const PromotionManager = () => {
             <button onClick={handleShowCurrentPromotions}>Show Current Promotions</button>
             <button onClick={handleOpenAddPromotionForm}>Add Promotion</button>
 
-            {showAddForm && <PromotionForm onClose={handleCloseAddForm} />}
+            {showAddForm && <PromotionForm onClose={handleCloseAddPromotionForm} />}
 
             {showTable && promotions.length > 0 && (
                 <div>
@@ -112,11 +113,7 @@ const PromotionManager = () => {
                                     <td>{promotion.discountType}</td>
                                     <td>{promotion.discountAmount}</td>
                                     <td>{promotion.description}</td>
-                                    <td>
-                                        {promotion.image && (
-                                            <img src={`data:image/jpeg;base64,${promotion.image}`} alt="Promotion" style={{ width: '100px', height: 'auto' }} />
-                                        )}
-                                    </td>
+                                    <td>{promotion.imagePath}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -128,6 +125,3 @@ const PromotionManager = () => {
 };
 
 export default PromotionManager;
-
-
-
