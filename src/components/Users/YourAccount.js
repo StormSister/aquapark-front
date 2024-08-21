@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import EditUser from './EditUser'; // Importujemy komponent EditUser
+import EditUser from './EditUser';
+import TicketList from './TicketList';
 
 const YourAccount = () => {
     const [reservations, setReservations] = useState([]);
     const [showReservations, setShowReservations] = useState(false);
-    const [userData, setUserData] = useState(null); // Stan przechowujący dane użytkownika
-    const [editFormVisible, setEditFormVisible] = useState(false); // Stan do śledzenia czy formularz edycji jest widoczny
+    const [tickets, setTickets] = useState([]);
+    const [showTickets, setShowTickets] = useState(false);
+    const [userData, setUserData] = useState(null);
+    const [editFormVisible, setEditFormVisible] = useState(false);
     const userEmail = localStorage.getItem('userEmail');
-    const token = localStorage.getItem('accessToken'); // Pobieramy token z localStorage
+    const token = localStorage.getItem('accessToken');
 
     useEffect(() => {
         if (userEmail) {
@@ -25,13 +28,11 @@ const YourAccount = () => {
 
     const fetchUserData = async () => {
         try {
-            console.log(userEmail);
             const response = await axios.get(`http://localhost:8080/api/users/search?email=${encodeURIComponent(userEmail)}`, getHeaders());
-            console.log('Received user data:', response.data);
             if (response.data) {
-                setUserData(response.data); // Ustawiamy dane użytkownika
+                setUserData(response.data);
             } else {
-                setUserData(null); // Jeśli brak danych, ustawiamy na null
+                setUserData(null);
             }
         } catch (error) {
             console.error('Failed to fetch user data:', error);
@@ -41,9 +42,8 @@ const YourAccount = () => {
     const updateUser = async (updatedUser) => {
         try {
             const response = await axios.put(`http://localhost:8080/api/users/${userData.id}`, updatedUser, getHeaders());
-            console.log('Updated user:', response.data);
-            setUserData(response.data); // Aktualizujemy dane użytkownika po udanej aktualizacji
-            setEditFormVisible(false); // Ukrywamy formularz po udanej aktualizacji
+            setUserData(response.data);
+            setEditFormVisible(false);
         } catch (error) {
             console.error('Failed to update user:', error);
         }
@@ -52,10 +52,9 @@ const YourAccount = () => {
     const deleteUser = async (userId) => {
         try {
             await axios.delete(`http://localhost:8080/api/users/${userId}`, getHeaders());
-            console.log('Deleted user with ID:', userId);
-            localStorage.removeItem('userEmail'); // Usuwamy email użytkownika z localStorage
-            setUserData(null); // Czyścimy dane użytkownika w stanie
-            setEditFormVisible(false); // Ukrywamy formularz po usunięciu użytkownika
+            localStorage.removeItem('userEmail');
+            setUserData(null);
+            setEditFormVisible(false);
         } catch (error) {
             console.error('Failed to delete user:', error);
         }
@@ -72,7 +71,6 @@ const YourAccount = () => {
     const fetchUserReservations = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/reservations/api/user?email=${encodeURIComponent(userEmail)}`, getHeaders());
-            console.log('Received reservations:', response.data);
             setReservations(response.data);
             setShowReservations(true);
         } catch (error) {
@@ -80,18 +78,36 @@ const YourAccount = () => {
         }
     };
 
+    const fetchUserTickets = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/tickets/api/active?email=${encodeURIComponent(userEmail)}`, getHeaders());
+            setTickets(response.data);
+            console.log("Tickets "+ response.data);
+            setShowTickets(true);
+        } catch (error) {
+            console.error('Failed to fetch tickets:', error);
+        }
+    };
+
+    const toggleTickets = () => {
+        if (showTickets) {
+            setShowTickets(false);
+        } else {
+            fetchUserTickets();
+        }
+    };
+
     const handleEditProfile = () => {
-        fetchUserData(); 
+        fetchUserData();
         setEditFormVisible(true);
     };
 
     const cancelEdit = () => {
-        setEditFormVisible(false); 
+        setEditFormVisible(false);
     };
 
     return (
         <div>
-            {/* Renderujemy tylko gdy są dane użytkownika */}
             {userData && !editFormVisible && (
                 <div>
                     <h2>Your Account</h2>
@@ -103,18 +119,17 @@ const YourAccount = () => {
                         <p>Phone Number: {userData.phoneNumber}</p>
                         <p>Role: {userData.role}</p>
                     </div>
-                    <button onClick={handleEditProfile}>Edit Profile</button> {/* Guzik "Edit Profile" */}
+                    <button onClick={handleEditProfile}>Edit Profile</button>
                 </div>
             )}
 
-            {/* Renderujemy formularz edycji gdy widoczny */}
             {editFormVisible && userData && (
                 <EditUser
                     user={userData}
                     onUpdateUser={updateUser}
                     onDeleteUser={deleteUser}
                     isLoggedIn={!!userData}
-                    onCancel={cancelEdit} 
+                    onCancel={cancelEdit}
                 />
             )}
 
@@ -137,6 +152,14 @@ const YourAccount = () => {
             {showReservations && reservations.length === 0 && (
                 <p>No reservations found.</p>
             )}
+
+           
+            <div>
+            <button onClick={toggleTickets}>
+                {showTickets ? 'Hide Tickets' : 'Show Tickets'}
+            </button>
+            {showTickets && <TicketList tickets={tickets} />}
+        </div>
         </div>
     );
 };
