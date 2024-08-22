@@ -7,6 +7,7 @@ import "./Home.css";
 import Contact from "./Contact";
 import FacilitySection from "../Facilities/FacilitySection";
 import PromotionBanner from "../Promotions/PromotionBanner"
+import Thermometer from './Thermometer';
 
 const Home = ({ attractions }) => {
   return (
@@ -43,6 +44,7 @@ const Home = ({ attractions }) => {
       </section>
       <Contact/>
       <PromotionBanner/>
+      {/* <Thermometer/> */}
     </div>
   );
 };

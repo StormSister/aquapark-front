@@ -17,6 +17,7 @@ import LoginSuccess from './components/Auth/LoginSuccess';
 import Payment from './components/Payments/Payment'; 
 import SuccessPage from './components/Payments/SuccessPage';
 import Confirmation from './components/Payments/Confirmation';
+import SellTickets from './components/Tickets/SellTickets';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -59,7 +60,7 @@ const App = () => {
       localStorage.setItem('userEmail', decoded.username || '');
       localStorage.setItem('userRole', decoded.authorities || 'notLoggedIn'); // Dodaj to dla pełności
   
-      // Logowanie wartości zapisanych w localStorage
+    
       console.log('LocalStorage after login - Token:', localStorage.getItem('accessToken'));
       console.log('LocalStorage after login - Email:', localStorage.getItem('userEmail'));
       console.log('LocalStorage after login - Role:', localStorage.getItem('userRole'));
@@ -112,7 +113,9 @@ const App = () => {
           <Route path="/add-promotion" element={<PromotionManager />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/success" element={<SuccessPage />} />
+          <Route path="/sell-tickets" element={<SellTickets />} />
         <Route path="/confirmation" element={<Confirmation />} />
+
         </Routes>
       </div>
     </Router>

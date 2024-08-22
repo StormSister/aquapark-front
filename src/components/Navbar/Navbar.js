@@ -50,14 +50,14 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
         { label: "My Account", path: "/your-account" },
       ],
       worker: [
-        { label: "Sell Tickets", path: "/sell-ticket" },
+        { label: "Sell Tickets", path: "/sell-tickets" },
         { label: "Check Ticket", path: "/check-ticket" },
         { label: "Reservations", path: "/book-room" },
         { label: "Cancel Reservation", path: "/cancel-reservation" },
         { label: "My account", path: "/your-account" },
       ],
       manager: [
-        { label: "Sell Tickets", path: "/sell-ticket" },
+        { label: "Sell Tickets", path: "/sell-tickets" },
         { label: "Check Ticket", path: "/check-ticket" },
         { label: "Rooms", path: "/book-room" },
         { label: "Reservations", path: "/cancel-reservation" },
