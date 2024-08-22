@@ -7,15 +7,21 @@ const Thermometer = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const location = 'Tequisquiapan'; 
+    const location = 'Tecozautla';
+    const apiKey = 'd7330e888bbdbc8992f8472025635c55'; 
 
     useEffect(() => {
         const fetchTemperature = async () => {
             try {
-                console.log(`Fetching temperature from: https://wttr.in/${location}?format=%t`);
-                const response = await axios.get(`https://wttr.in/${location}?format=%t`);
-                console.log('Temperature data:', response.data);
-                setTemperature(response.data); 
+                console.log(`Fetching temperature for ${location} from OpenWeather`);
+                const response = await axios.get(
+                    `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${apiKey}`
+                );
+                console.log('Weather data:', response.data);
+
+                const tempCelsius = Math.round(response.data.main.temp);
+                console.log(tempCelsius);
+                setTemperature(tempCelsius);
             } catch (err) {
                 console.error('Error fetching data:', err);
                 setError(err);
@@ -25,7 +31,7 @@ const Thermometer = () => {
         };
 
         fetchTemperature();
-    }, [location]);
+    }, [location, apiKey]);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error fetching data: {error.message}</p>;
@@ -35,13 +41,13 @@ const Thermometer = () => {
             <div className="temperature-section">
                 <img src="/assets/images/thermometer/thermometer-svgrepo-com.svg" alt="Air" className="thermometer-icon" />
                 <div className="temperature-text">
-                    <p>Air {temperature}</p>
+                    <p>Air  {temperature}°C</p>
                 </div>
             </div>
             <div className="temperature-section">
                 <img src="/assets/images/thermometer/water-temperature.svg" alt="Water" className="thermometer-icon" />
                 <div className="temperature-text">
-                    <p>Water +38°C</p>
+                    <p>Water  38°C</p>
                 </div>
             </div>
         </div>
