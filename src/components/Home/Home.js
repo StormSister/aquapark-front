@@ -44,7 +44,7 @@ const Home = ({ attractions }) => {
       </section>
       <Contact/>
       <PromotionBanner/>
-      {/* <Thermometer/> */}
+      <Thermometer/>
     </div>
   );
 };
