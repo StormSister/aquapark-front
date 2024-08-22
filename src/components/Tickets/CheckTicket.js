@@ -15,8 +15,9 @@ const getHeaders = () => ({
         'Authorization': `${token}`,
         'Content-Type': 'application/json'
     }
+    
 });
-console.log(getHeaders());
+
 
 
 
@@ -26,12 +27,12 @@ console.log(getHeaders());
             console.log('Data text:', data.text);
 
             try {
-                // Wyłącz skaner od razu po odczytaniu kodu QR
                 setScannerEnabled(false);
+            
                 
 
-                const response = await axios.post('http://localhost:8080/tickets/api/check-qr', getHeaders(),
-                    { qrCode: data.text });
+                const response = await axios.post('http://localhost:8080/tickets/api/check-qr',
+                    { qrCode: data.text }, getHeaders());
                 
                 setMessage(response.data);
                 console.log('Response from server:', JSON.stringify(response.data, null, 2));
