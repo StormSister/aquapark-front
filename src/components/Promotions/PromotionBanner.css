@@ -1,7 +1,9 @@
 /* Sekcja z promocjami */
 .promotion-banner {
     padding: 20px;
-    background-color: rgb(250, 73, 15); /* Kolor tła dla sekcji */
+    background-color: rgb(250, 73, 15); 
+    border-radius: 8px;
+    margin: 0 20px;
 }
 
 /* Styl nagłówka */
