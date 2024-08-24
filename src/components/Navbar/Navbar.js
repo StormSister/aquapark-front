@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Navbar.css";
+import Thermometer from "../Home/Thermometer";
 
 const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrollUpAmount, setScrollUpAmount] = useState(0);
+  const [isThermometerVisible, setIsThermometerVisible] = useState(false); // State for Thermometer visibility
   const scrollUpThreshold = 150;
   const navigate = useNavigate();
 
@@ -18,6 +20,14 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleMouseEnter = () => {
+    setIsThermometerVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsThermometerVisible(false);
   };
 
   useEffect(() => {
@@ -96,11 +106,19 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
     >
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          <img
-            src={"../assets/images/logo/ElArenal.svg"}
-            alt="Aquapark"
-            className="logo"
-          />
+          <div
+            className="logo-container"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img
+              src={"../assets/images/logo/ElArenal.svg"}
+              alt="Aquapark"
+              className="logo"
+            />
+            {/* Render the Thermometer only when the logo is hovered */}
+            {isThermometerVisible && <Thermometer />}
+          </div>
         </Link>
         <div className="menu-icon" onClick={toggleMenu}>
           &#9776; {/* Ikona hamburgera */}

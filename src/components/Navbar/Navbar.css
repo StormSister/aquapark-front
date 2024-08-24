@@ -6,7 +6,7 @@
 
 /* Navbar Styles */
 .navbar-custom {
-  background-color: rgba(207, 244, 252, 0.9); 
+  background-color: rgba(207, 244, 252, 0.9);
   width: 100%;
   padding: 10px 0;
   margin-bottom: auto;
@@ -129,6 +129,15 @@
 .btn-outline-danger:hover {
   background-color: red;
   border-color: red;
+}
+
+.thermometer {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  z-index: 1000;
 }
 
 /* Responsive Design */
