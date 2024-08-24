@@ -6,27 +6,25 @@ import { facilityData } from "../Facilities/FacilityData";
 import "./Home.css";
 import Contact from "./Contact";
 import FacilitySection from "../Facilities/FacilitySection";
-import PromotionBanner from "../Promotions/PromotionBanner"
-import Thermometer from './Thermometer';
+import PromotionBanner from "../Promotions/PromotionBanner";
+import Thermometer from "./Thermometer";
 
 const Home = ({ attractions }) => {
   return (
     <div>
-         <div>
-      <div className="hero-section">
-        <h1>Balneario El Arenal</h1>
-        <h2>Vive la experiencia Arenal!</h2>
-        <Link to="/buy-tickets">
-          <button className="buy-tickets-button">Buy Tickets</button>
-        </Link>
+      <div>
+        <div className="hero-section">
+          <h1>Balneario El Arenal</h1>
+          <h2>Vive la experiencia Arenal!</h2>
+          <div className="carousel">
+            <Carousel images={data} />
+          </div>
+          <Link to="/buy-tickets">
+            <button className="buy-tickets-button">Buy Tickets</button>
+          </Link>
+        </div>
       </div>
-    </div>
-      <div className="header-section">
-        <h1>Balnearo El Arenal: a world of entertainment!</h1>
-      </div>
-      <div className="carousel">
-        <Carousel images={data} />
-      </div>
+      <PromotionBanner />
       <section className="facilities-section">
         <div>
           {facilityData.map((info, index) => (
@@ -38,13 +36,14 @@ const Home = ({ attractions }) => {
               buttonText={info.buttonText}
               link={info.link}
               reverse={info.reverse}
+              isModal={info.isModal}
+              modalContent={info.modalContent}
             />
           ))}
         </div>
       </section>
-      <Contact/>
-      <PromotionBanner/>
-      <Thermometer/>
+      <Contact />
+      <Thermometer />
     </div>
   );
 };

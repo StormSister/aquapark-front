@@ -7,6 +7,8 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrollUpAmount, setScrollUpAmount] = useState(0);
+  const scrollUpThreshold = 150;
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -24,8 +26,15 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
 
       if (currentScrollY > lastScrollY) {
         setIsVisible(false);
+        setScrollUpAmount(0);
       } else {
-        setIsVisible(true);
+        const deltaY = lastScrollY - currentScrollY;
+        setScrollUpAmount((prev) => prev + deltaY);
+
+        if (scrollUpAmount + deltaY > scrollUpThreshold) {
+          setIsVisible(true);
+          setScrollUpAmount(0);
+        }
       }
 
       setLastScrollY(currentScrollY);
@@ -36,7 +45,7 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [lastScrollY]);
+  }, [lastScrollY, scrollUpAmount]);
 
   const renderNavLinks = () => {
     const navLinks = {
@@ -106,14 +115,15 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
           <div className="navbar-nav-right">
             {!isLoggedIn ? (
               <>
-                <Link className="nav-link" to="/login">Login</Link>
-                <Link className="nav-link" to="/register">Register</Link>
+                <Link className="nav-link" to="/login">
+                  Login
+                </Link>
+                <Link className="nav-link" to="/register">
+                  Register
+                </Link>
               </>
             ) : (
-              <button
-                className="btn-outline-danger"
-                onClick={handleLogout}
-              >
+              <button className="btn-outline-danger" onClick={handleLogout}>
                 Logout
               </button>
             )}
@@ -131,5 +141,3 @@ Navbar.propTypes = {
 };
 
 export default Navbar;
-
-
