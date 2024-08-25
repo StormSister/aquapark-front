@@ -14,6 +14,7 @@ const PromotionBanner = () => {
         try {
             const response = await axios.get('http://localhost:8080/promotions/currentDisplay');
             if (Array.isArray(response.data)) {
+                console.log(response.data);
                 setCurrentPromotions(response.data);  
             } else {
                 console.error('Expected an array of promotions, but got:', response.data);
@@ -32,7 +33,7 @@ const PromotionBanner = () => {
     };
 
     return (
-        <div className="promotion-banner">
+        <div className="promotion-banner">s
             <h2>Current Promotions</h2>
             <div className="promotion-details">
                 {currentPromotions.map(promotion => (
@@ -44,7 +45,7 @@ const PromotionBanner = () => {
                         <p>Start Date: {new Date(promotion.startDate).toLocaleString()}</p>
                         <p>End Date: {new Date(promotion.endDate).toLocaleString()}</p>
                         <p>Description: {promotion.description}</p>
-                        <p>Discount Amount: {promotion.discountAmount}%</p>
+                        {/* <p>Discount Amount: {promotion.discountAmount}%</p> */}
                         {promotion.imagePath && (
                             <img src={`http://localhost:8080${promotion.imagePath}`} alt="Promotion" />
                         )}

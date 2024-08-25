@@ -28,7 +28,11 @@ const validationSchema = Yup.object().shape({
     description: Yup.string().required('Description is required'),
     categories: Yup.array()
         .min(1, 'At least one category must be selected')
-        .required('Categories are required')
+        .required('Categories are required'),
+    image: Yup.mixed()
+        .required('Image is required')
+        .test('fileSize', 'File size is too large', value => !value || (value && value.size <= 5 * 1024 * 1024)) // 5MB limit
+        .test('fileType', 'Unsupported file type', value => !value || ['image/jpeg', 'image/png'].includes(value.type))
 });
 
 const PromotionForm = ({ onClose }) => {
@@ -80,6 +84,7 @@ const PromotionForm = ({ onClose }) => {
                     discountAmount: '',
                     description: '',
                     categories: [],
+                    image: null, // Added to manage image file
                 }}
                 validationSchema={validationSchema}
                 onSubmit={async (values, { setSubmitting }) => {
@@ -91,6 +96,10 @@ const PromotionForm = ({ onClose }) => {
                     formData.append('discountAmount', values.discountAmount);
                     formData.append('description', values.description);
                     formData.append('categories', JSON.stringify(values.categories));
+                    
+                    if (values.image) {
+                        formData.append('image', values.image);
+                    }
 
                     console.log('FormData contents before sending:');
                     formData.forEach((value, key) => {
@@ -101,7 +110,7 @@ const PromotionForm = ({ onClose }) => {
                         const token = localStorage.getItem('accessToken');
                         const response = await axios.post('http://localhost:8080/promotions/api/add', formData, {
                             headers: {
-                                'Authorization': `Bearer ${token}`,
+                                'Authorization': `${token}`,
                                 'Content-Type': 'multipart/form-data'
                             }
                         });
@@ -221,6 +230,22 @@ const PromotionForm = ({ onClose }) => {
                                 </ErrorMessage>
                             </div>
                         </div>
+                        <div className="form-group">
+                            <label>Image:</label>
+                            <div className="error-container">
+                                <input
+                                    type="file"
+                                    name="image"
+                                    onChange={(event) => {
+                                        const file = event.currentTarget.files[0];
+                                        setFieldValue('image', file);
+                                    }}
+                                />
+                                <ErrorMessage name="image">
+                                    {msg => <div className="error-message">{msg}</div>}
+                                </ErrorMessage>
+                            </div>
+                        </div>
                         <div className="form-actions">
                             <button type="submit" disabled={isSubmitting}>
                                 {isSubmitting ? 'Submitting...' : 'Add Promotion'}
@@ -235,3 +260,4 @@ const PromotionForm = ({ onClose }) => {
 };
 
 export default PromotionForm;
+
