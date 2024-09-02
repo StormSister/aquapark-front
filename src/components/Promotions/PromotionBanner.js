@@ -33,7 +33,7 @@ const PromotionBanner = () => {
     };
 
     return (
-        <div className="promotion-banner">s
+        <div className="promotion-banner">
             <h2>Current Promotions</h2>
             <div className="promotion-details">
                 {currentPromotions.map(promotion => (
