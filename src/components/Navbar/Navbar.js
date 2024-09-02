@@ -116,7 +116,6 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
               alt="Aquapark"
               className="logo"
             />
-            {/* Render the Thermometer only when the logo is hovered */}
             {isThermometerVisible && <Thermometer />}
           </div>
         </Link>

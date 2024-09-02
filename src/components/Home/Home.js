@@ -7,7 +7,7 @@ import "./Home.css";
 import Contact from "./Contact";
 import FacilitySection from "../Facilities/FacilitySection";
 import PromotionBanner from "../Promotions/PromotionBanner";
-import Thermometer from "./Thermometer";
+import Footer from "../Footer/Footer";
 
 const Home = ({ attractions }) => {
   return (
@@ -43,7 +43,7 @@ const Home = ({ attractions }) => {
         </div>
       </section>
       <Contact />
-      <Thermometer />
+      <Footer />
     </div>
   );
 };

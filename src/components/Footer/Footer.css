@@ -1,0 +1,60 @@
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #f0f8ff; /* Background color matching your navbar */
+  color: #ff4500; /* Text color from your navbar */
+  font-family: "Arial", sans-serif; /* Assuming Arial, adjust if different */
+  text-align: center;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); /* Shadow for visual separation */
+}
+
+.footer-buttons {
+  display: flex; /* Ensures buttons are lined up horizontally */
+  justify-content: center; /* Center buttons horizontally */
+  width: 100%; /* Full width to spread out */
+  margin-bottom: 10px; /* Space above the horizontal line */
+}
+
+footer button {
+  background: none; /* Removes the standard button background */
+  border: none; /* No borders */
+  color: inherit; /* Inherits color from footer */
+  margin: 0 15px; /* Ensures spacing between buttons */
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none; /* No underline by default */
+  outline: none; /* Removes the focus outline */
+}
+
+footer hr {
+  width: 80%; /* Limits the width of the line */
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  ); /* Gradient effect for the line */
+}
+
+.footer-bottom {
+  font-size: 14px; /* Smaller font size for copyright text */
+  color: #666; /* Light grey color for text */
+  width: 100%; /* Full width */
+  text-align: center; /* Ensures text is centered */
+}
+
+footer button:hover,
+footer button:focus {
+  text-decoration: none; /* Ensures no underline appears on hover */
+  color: inherit; /* Keeps color same on hover */
+  background: none; /* No background change on hover */
+}
