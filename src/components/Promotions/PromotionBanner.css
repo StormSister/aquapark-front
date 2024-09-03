@@ -1,123 +1,123 @@
 /* Sekcja z promocjami */
 .promotion-banner {
-    padding: 20px;
-    background-color: rgb(250, 73, 15); 
-    border-radius: 8px;
-    margin: 0 20px;
+  padding: 20px;
+  background-color: rgb(250, 73, 15);
+  border-radius: 8px;
+  margin: auto auto; /* Centers the banner horizontally */
 }
 
 /* Styl nagłówka */
 .promotion-banner h2 {
-    color: #fff; /* Biały kolor tekstu */
-    font-weight: bold; /* Pogrubiony tekst */
-    margin-bottom: 20px; /* Margines dolny */
+  color: #fff; /* Biały kolor tekstu */
+  font-weight: bold; /* Pogrubiony tekst */
+  margin-bottom: 20px; /* Margines dolny */
 }
 
 /* Kontener dla szczegółów promocji */
 .promotion-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 /* Styl dla pojedynczego elementu promocji */
 .promotion-item {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    width: calc(33% - 20px); /* Trzy kolumny */
-    box-sizing: border-box;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    position: relative; /* Aby móc później używać pseudo-elementów */
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  width: calc(33% - 20px); /* Trzy kolumny */
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  position: relative; /* Aby móc później używać pseudo-elementów */
 }
 
 /* Powiększenie na hover */
 .promotion-item:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 /* Styl dla obrazka w małym banerze */
 .promotion-item img {
-    max-width: 50%; /* Pomniejszony obrazek */
-    height: auto;
-    border-radius: 4px;
-    margin-top: 10px;
-    display: block; /* Upewnij się, że obrazek zajmuje pełną szerokość kontenera */
-    margin-left: auto; /* Wyrównanie do środka */
-    margin-right: auto; /* Wyrównanie do środka */
+  max-width: 50%; /* Pomniejszony obrazek */
+  height: auto;
+  border-radius: 4px;
+  margin-top: 10px;
+  display: block; /* Upewnij się, że obrazek zajmuje pełną szerokość kontenera */
+  margin-left: auto; /* Wyrównanie do środka */
+  margin-right: auto; /* Wyrównanie do środka */
 }
 
 /* Styl dla tekstu w promocji */
 .promotion-item p {
-    margin: 0 0 10px;
+  margin: 0 0 10px;
 }
 
 /* Style dla dużego widoku (modal) */
 .promotion-item-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .promotion-item-modal-content {
-    background: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    width: 80%;
-    max-width: 800px;
-    position: relative;
-    overflow: hidden; /* Dodane, aby obrazek nie wychodził poza kontener */
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 80%;
+  max-width: 800px;
+  position: relative;
+  overflow: hidden; /* Dodane, aby obrazek nie wychodził poza kontener */
 }
 
 /* Styl dla obrazka w modal */
 .promotion-item-modal-content img {
-    max-width: 100%; /* Pełny rozmiar obrazka w modal */
-    height: auto;
-    border-radius: 4px;
+  max-width: 100%; /* Pełny rozmiar obrazka w modal */
+  height: auto;
+  border-radius: 4px;
 }
 
 /* Styl przycisku zamknięcia w modal */
 .promotion-item-modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgb(250, 73, 15);
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 24px;
-    color: #000;
-    z-index: 1000; /* Upewnij się, że jest na wierzchu */
-    text-align: center; /* Wyrównanie tekstu do środka */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgb(250, 73, 15);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 24px;
+  color: #000;
+  z-index: 1000; /* Upewnij się, że jest na wierzchu */
+  text-align: center; /* Wyrównanie tekstu do środka */
 }
 
 @media (max-width: 768px) {
-    .promotion-details {
-        flex-direction: column; /* Pionowe wyświetlanie na małych ekranach */
-        align-items: center; /* Wyśrodkowanie kontenerów */
-    }
+  .promotion-details {
+    flex-direction: column; /* Pionowe wyświetlanie na małych ekranach */
+    align-items: center; /* Wyśrodkowanie kontenerów */
+  }
 
-    .promotion-item {
-        width: 90%; /* Szerokość kontenera na małych ekranach */
-        max-width: 600px; /* Maksymalna szerokość kontenera na małych ekranach */
-        margin: 10px 0; /* Marginesy pionowe */
-    }
+  .promotion-item {
+    width: 90%; /* Szerokość kontenera na małych ekranach */
+    max-width: 600px; /* Maksymalna szerokość kontenera na małych ekranach */
+    margin: 10px 0; /* Marginesy pionowe */
+  }
 
-    .promotion-item img {
-        max-width: 100%; /* Obrazki zajmują pełną szerokość kontenera */
-    }
+  .promotion-item img {
+    max-width: 100%; /* Obrazki zajmują pełną szerokość kontenera */
+  }
 }

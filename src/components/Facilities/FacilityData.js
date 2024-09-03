@@ -1,3 +1,4 @@
+import { spaData } from "../Modal/spaData";
 export const facilityData = [
   {
     image: "../assets/images/rooms/SeniorSuite.webp",
@@ -13,8 +14,9 @@ export const facilityData = [
     description:
       "Discover serenity at Balneario El Arenal, where luxury and nature come together to offer you an unparalleled wellness experience.",
     buttonText: "Massage selection",
-    link: "/book-room",
     reverse: true,
+    isModal: true,
+    modalData: { spaData },
   },
   {
     image: "../assets/images/attractions/Pool.webp",

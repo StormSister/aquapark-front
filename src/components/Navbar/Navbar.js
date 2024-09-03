@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Navbar.css";
+import Thermometer from "../Home/Thermometer";
 
 const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrollUpAmount, setScrollUpAmount] = useState(0);
+  const [isThermometerVisible, setIsThermometerVisible] = useState(false); // State for Thermometer visibility
+  const scrollUpThreshold = 150;
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -18,14 +22,29 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleMouseEnter = () => {
+    setIsThermometerVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsThermometerVisible(false);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
       if (currentScrollY > lastScrollY) {
         setIsVisible(false);
+        setScrollUpAmount(0);
       } else {
-        setIsVisible(true);
+        const deltaY = lastScrollY - currentScrollY;
+        setScrollUpAmount((prev) => prev + deltaY);
+
+        if (scrollUpAmount + deltaY > scrollUpThreshold) {
+          setIsVisible(true);
+          setScrollUpAmount(0);
+        }
       }
 
       setLastScrollY(currentScrollY);
@@ -36,7 +55,7 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [lastScrollY]);
+  }, [lastScrollY, scrollUpAmount]);
 
   const renderNavLinks = () => {
     const navLinks = {
@@ -87,11 +106,18 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
     >
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          <img
-            src={"../assets/images/logo/ElArenal.svg"}
-            alt="Aquapark"
-            className="logo"
-          />
+          <div
+            className="logo-container"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img
+              src={"../assets/images/logo/ElArenal.svg"}
+              alt="Aquapark"
+              className="logo"
+            />
+            {isThermometerVisible && <Thermometer />}
+          </div>
         </Link>
         <div className="menu-icon" onClick={toggleMenu}>
           &#9776; {/* Ikona hamburgera */}
@@ -106,14 +132,15 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
           <div className="navbar-nav-right">
             {!isLoggedIn ? (
               <>
-                <Link className="nav-link" to="/login">Login</Link>
-                <Link className="nav-link" to="/register">Register</Link>
+                <Link className="nav-link" to="/login">
+                  Login
+                </Link>
+                <Link className="nav-link" to="/register">
+                  Register
+                </Link>
               </>
             ) : (
-              <button
-                className="btn-outline-danger"
-                onClick={handleLogout}
-              >
+              <button className="btn-outline-danger" onClick={handleLogout}>
                 Logout
               </button>
             )}
@@ -131,5 +158,3 @@ Navbar.propTypes = {
 };
 
 export default Navbar;
-
-

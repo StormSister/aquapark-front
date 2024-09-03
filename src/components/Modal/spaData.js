@@ -1,0 +1,15 @@
+export const spaData = [
+  "Combinado - $600.00 1 Hr (Descontracturante y relajante)",
+  "Relajante y facial - $600.00 1 Hr",
+  "Facial y Spa de manos - $600.000 1 Hr",
+  "Linfático y facial - $600.000 1Hr",
+  "Tejido Profundo $400.00  30 min",
+  "Masaje con Ventosas - $350.00  30 min",
+  "Masaje Descontracturante o sueco - $400.00  30 min",
+  "Mascarilla de arcilla - $300.00  30 min",
+  "Masaje linfático - $500.00  1 Hr",
+  "Masaje  facial - $350.00  30 min",
+  "Piedras Calientes - $650.00  1 Hr",
+  "Masaje relajante $500.00  1 Hr",
+  "Quiromasaje - $600.00  1 Hr",
+];
