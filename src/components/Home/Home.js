@@ -21,36 +21,32 @@ const Home = () => {
     setIsModalOpen(false);
   };
   return (
-    <div>
-      <div>
-        <div className="hero-section">
-          <h1>Balneario El Arenal</h1>
-          <h2>Vive la experiencia Arenal!</h2>
-          <div className="carousel">
-            <Carousel images={data} />
-          </div>
-          <Link to="/buy-tickets">
-            <button className="buy-tickets-button">Buy Tickets</button>
-          </Link>
+    <div className="home-container">
+      <div className="hero-section">
+        <h1>Balneario El Arenal</h1>
+        <h2>Vive la experiencia Arenal!</h2>
+        <div className="carousel">
+          <Carousel images={data} />
         </div>
+        <Link to="/buy-tickets">
+          <button className="buy-tickets-button">Buy Tickets</button>
+        </Link>
       </div>
       <PromotionBanner />
       <section className="facilities-section">
-        <div>
-          {facilityData.map((info, index) => (
-            <FacilitySection
-              key={index}
-              image={info.image}
-              title={info.title}
-              description={info.description}
-              buttonText={info.buttonText}
-              link={info.link}
-              reverse={info.reverse}
-              isModal={info.isModal}
-              modalContent={info.modalContent}
-            />
-          ))}
-        </div>
+        {facilityData.map((info, index) => (
+          <FacilitySection
+            key={index}
+            image={info.image}
+            title={info.title}
+            description={info.description}
+            buttonText={info.buttonText}
+            link={info.link}
+            reverse={info.reverse}
+            isModal={info.isModal}
+            modalContent={info.modalContent}
+          />
+        ))}
       </section>
       <NavigationModal isOpen={isModalOpen} onClose={closeModal}>
         <Navigation />

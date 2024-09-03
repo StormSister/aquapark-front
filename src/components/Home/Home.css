@@ -1,6 +1,6 @@
-@font-face {
-  font-family: CustomFont;
-  src: url("/public/fonts/Simply2CondensedRegular.ttf");
+.home-container {
+  padding-bottom: 350px;
+  min-height: 100vh;
 }
 
 .img {
