@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./FacilitySection.css";
-import Modal from "../Modal/Modal";
-import { spaData } from "../Modal/spaData";
+import Modal from "../Modals/Modal";
+import { spaData } from "../Modals/spaData";
 
 const FacilitySection = ({
   image,

@@ -7,7 +7,8 @@ const Footer = ({ showModal }) => {
     const checkScrollBottom = () => {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight) {
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        // Check if near the bottom
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -15,19 +16,24 @@ const Footer = ({ showModal }) => {
     };
 
     window.addEventListener("scroll", checkScrollBottom);
-
     return () => {
       window.removeEventListener("scroll", checkScrollBottom);
     };
   }, []);
 
-  if (!isVisible) {
-    return null;
-  }
   return (
-    <footer className="nav-footer-common">
+    <footer
+      className={`nav-footer-common ${isVisible ? "footer-visible" : ""}`}
+    >
+      <div className="footer-contact">
+        <h3>Contact Us</h3>
+        <p>Carr. Huichapan - Tecozautla Km. 27.5</p>
+        <p>Morelos, 42440 Tecozautla, Hgo. Mexico</p>
+        <p>WhatsApp: 7711949533</p>
+        <p>Hotel: 7731068780</p>
+        <p>Email: ventas@arenalacuatico.com</p>
+      </div>
       <div className="footer-buttons">
-        <button onClick={() => showModal("contact")}>Contact Us</button>
         <button onClick={() => showModal("map")}>Find Us Here</button>
       </div>
       <hr />
