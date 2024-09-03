@@ -1,4 +1,4 @@
-import { spaData } from "../Modal/spaData";
+import { spaData } from "../Modals/spaData";
 export const facilityData = [
   {
     image: "../assets/images/rooms/SeniorSuite.webp",

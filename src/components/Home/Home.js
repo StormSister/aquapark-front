@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import Carousel from "./Carousel";
 import { data } from "./imgsForCarousel";
 import { Link } from "react-router-dom";
 import { facilityData } from "../Facilities/FacilityData";
 import "./Home.css";
-import Contact from "./Contact";
+import Navigation from "../Footer/Navigation";
 import FacilitySection from "../Facilities/FacilitySection";
 import PromotionBanner from "../Promotions/PromotionBanner";
 import Footer from "../Footer/Footer";
+import NavigationModal from "../Modals/NavigationModal";
 
-const Home = ({ attractions }) => {
+const Home = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div>
       <div>
@@ -42,8 +52,10 @@ const Home = ({ attractions }) => {
           ))}
         </div>
       </section>
-      <Contact />
-      <Footer />
+      <NavigationModal isOpen={isModalOpen} onClose={closeModal}>
+        <Navigation />
+      </NavigationModal>
+      <Footer showModal={showModal} closeModal={closeModal} />
     </div>
   );
 };

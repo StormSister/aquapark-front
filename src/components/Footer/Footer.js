@@ -8,7 +8,6 @@ const Footer = ({ showModal }) => {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - 5) {
-        // Check if near the bottom
         setIsVisible(true);
       } else {
         setIsVisible(false);

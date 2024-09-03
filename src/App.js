@@ -18,7 +18,6 @@ import Payment from "./components/Payments/Payment";
 import SuccessPage from "./components/Payments/SuccessPage";
 import Confirmation from "./components/Payments/Confirmation";
 import SellTickets from "./components/Tickets/SellTickets";
-import Footer from "./components/Footer/Footer";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
