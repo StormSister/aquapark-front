@@ -9,8 +9,8 @@ const Navbar = ({ isLoggedIn, userRole, onLogout }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrollUpAmount, setScrollUpAmount] = useState(0);
-  const [isThermometerVisible, setIsThermometerVisible] = useState(false); // State for Thermometer visibility
-  const scrollUpThreshold = 150;
+  const [isThermometerVisible, setIsThermometerVisible] = useState(false);
+  const scrollUpThreshold = 10;
   const navigate = useNavigate();
 
   const handleLogout = () => {

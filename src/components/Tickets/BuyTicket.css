@@ -1,0 +1,105 @@
+.purchase-form {
+  font-family: Arial, sans-serif;
+  max-width: 400px;
+  margin: 70px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.purchase-form h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.purchase-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.purchase-form input[type="email"],
+.purchase-form input[type="number"] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.purchase-form input[type="number"] {
+  width: 100%;
+  display: block;
+  margin-top: 5px;
+}
+
+.purchase-form input[type="checkbox"] {
+  margin-right: 10px;
+  margin-top: 15px;
+}
+
+.purchase-form .promotion-price {
+  text-decoration: line-through;
+  margin-right: 10px;
+  color: #999;
+}
+
+.purchase-form .promotion {
+  color: red;
+}
+
+.purchase-form h3 {
+  text-align: center;
+  margin-top: 20px;
+  color: #333;
+}
+
+.purchase-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.purchase-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.purchase-form p {
+  text-align: center;
+  margin-top: 15px;
+  color: red;
+}
+
+.ticket-item {
+  background-color: #e3f2fd;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.checkbox-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  white-space: nowrap;
+}
+
+.checkbox-container label {
+  margin: 0;
+}
+
+.checkbox-container input[type="checkbox"] {
+  margin-left: 10px;
+}
