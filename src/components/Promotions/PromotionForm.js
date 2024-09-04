@@ -34,7 +34,7 @@ const validationSchema = Yup.object().shape({
     .min(1, "At least one category must be selected")
     .required("Categories are required"),
   image: Yup.mixed()
-    .required("Image is required")
+    // .required("Image is required")
     .test(
       "fileSize",
       "File size is too large",

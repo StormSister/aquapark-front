@@ -1,3 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+
 .home-container {
   padding-bottom: 350px;
   min-height: 100vh;
@@ -18,9 +30,9 @@ body {
   background-color: var(--bgColor);
 }
 .hero-section {
-  height: calc(100vh - 60px); /* Wysokość pełnego okna przeglądarki */
-  width: 100vw; /* Szerokość pełnego okna przeglądarki */
-  background-image: url("/public/assets/images/bal_front.jpg"); /* Ścieżka absolutna do obrazka */
+  height: 100vh; /* Wysokość pełnego okna przeglądarki */
+  width: 100vw;  /* Szerokość pełnego okna przeglądarki */
+ background-image: url("/assets/images/bal_front.jpg");/* Ścieżka absolutna do obrazka */
   background-size: cover;
   background-position: center;
   display: flex;
@@ -29,17 +41,21 @@ body {
   align-items: center;
   text-align: center;
   color: white;
-  position: relative; /* Dodanie relatywnego pozycjonowania */
+  /* position: relative; */
+  display: block;
+  margin-bottom: 40px; /* Dodanie relatywnego pozycjonowania */
 }
 .hero-section h1 {
   font-size: 4rem;
-  margin-bottom: 20px;
+  margin-top: 70px; /* Zmniejszono margines od góry */
+  margin-bottom: 10px; /* Zmniejszono margines od dołu */
   font-family: "Baloo 2", cursive;
 }
 
 .hero-section h2 {
   font-size: 2rem;
-  margin-bottom: 20px;
+  margin-bottom: 50px; /* Zwiększono margines od dołu */
+  margin-top: 20px; /* Zmniejszono margines od góry */
   font-family: "Baloo 2", cursive;
 }
 
@@ -51,8 +67,10 @@ body {
   border-radius: 5px;
   color: white;
   cursor: pointer;
+  width: 200px; /* lub inna szerokość */
+  text-decoration: none; /* Usuwa podkreślenie tekstu */
+  display: inline-block; /* Umożliwia wyśrodkowanie */
 }
-
 .buy-tickets-button:hover {
   background-color: #e04e2a;
 }

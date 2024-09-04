@@ -39,7 +39,7 @@ const Thermometer = () => {
     return (
         <div className="thermometer">
             <div className="temperature-section">
-                <img src="/assets/images/thermometer/thermometer-svgrepo-com.svg" alt="Air" className="thermometer-icon" />
+            <img src={`${process.env.PUBLIC_URL}/assets/images/thermometer/thermometer-svgrepo-com.svg`} alt="Air" className="thermometer-icon" />
                 <div className="temperature-text">
                     <p>Air  {temperature}°C</p>
                 </div>

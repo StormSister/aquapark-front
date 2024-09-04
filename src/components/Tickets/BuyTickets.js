@@ -135,7 +135,7 @@ const BuyTickets = () => {
         {ticketTypes.map((ticket, index) => (
           <div key={`${ticket.category}-${ticket.type}-${index}`}>
             <label>
-              {`${ticket.category} Ticket:`}
+              {`${ticket.category} Ticket: `}
               {ticket.isPromotion ? (
                 <>
                   <span className="promotion-price">

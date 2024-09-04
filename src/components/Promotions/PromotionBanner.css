@@ -1,6 +1,7 @@
 /* Sekcja z promocjami */
 .promotion-banner {
   padding: 20px;
+  margin-top: 20px;
   background-color: rgb(250, 73, 15);
   border-radius: 8px;
   margin: auto auto; /* Centers the banner horizontally */
