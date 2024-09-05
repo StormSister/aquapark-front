@@ -1,6 +1,7 @@
 .create-reservation-container {
   padding-top: 70px;
 }
+
 .room-card {
   width: 300px;
   border: 1px solid #ccc;
@@ -18,36 +19,35 @@
 
 .room-card-image {
   max-width: 300px;
-  height: 300px; /* Ustalona wysokość dla obrazu */
-  overflow: hidden; /* Ukryj nadmiarowy obraz */
+  height: 300px;
+  overflow: hidden;
 }
 
 .room-card-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Dopasuj obraz do wymiarów kontenera */
+  object-fit: cover;
 }
 
 .room-card-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: center; /* Wycentrowanie kart w poziomie */
+  justify-content: center;
 }
 
 .calendar-container {
-  max-width: 600px; /* Maksymalna szerokość kontenera kalendarza */
-  margin: 0 auto; /* Wycentrowanie kalendarza na stronie */
+  max-width: 600px;
+  margin: 0 auto;
   padding: 20px;
-
-  background-color: #fff; /* Tło kalendarza */
+  background-color: #fff;
 }
 
 .form-field {
-  max-width: 600px; /* Maksymalna szerokość kontenera kalendarza */
-  margin: 0 auto; /* Wycentrowanie kalendarza na stronie */
+  max-width: 600px;
+  margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc; /* Ramka dla kalendarza */
+  border: 1px solid #ccc;
   background-color: #fff;
 }
 
@@ -56,31 +56,38 @@
   background: #fff;
   color: black;
   text-align: center;
-  border: 1px solid #ccc; /* Ramka dla każdej komórki kalendarza */
+  border: 1px solid #ccc;
 }
+
 .react-calendar__tile--today {
-  background-color: rgb(59, 119, 57); /* Zielone tło dla dzisiejszej daty */
-  color: white; /* Biały kolor czcionki dla dzisiejszej daty */
+  background-color: #61a3ac;
+  color: white;
 }
 
-.react-calendar__tile--hover {
-  background: #eaf; /* Tło dla daty po najechaniu */
-}
-
-/* Styl dla zaznaczonych dat */
 .react-calendar__tile--selected {
-  background: #baf; /* Tło dla zaznaczonej daty */
-  color: white; /* Kolor czcionki dla zaznaczonej daty */
+  background: rgb(235, 155, 6);
+  color: white;
+}
+
+.react-calendar__tile--rangeStart,
+.react-calendar__tile--rangeEnd {
+  background-color: #ffba08;
+  color: white;
+}
+
+.react-calendar__tile--rangeBetween {
+  background-color: #f4a261;
+  color: white;
 }
 
 .react-calendar__tile--disabled {
-  background-color: #f2f2f22f; /* Kolor tła dla wyłączonych płytek (dat przeszłych) */
-  color: #575252; /* Kolor czcionki dla wyłączonych płytek (dat przeszłych) */
-  cursor: not-allowed; /* Kursor nieaktywny dla wyłączonych płytek (dat przeszłych) */
+  background-color: #f2f2f22f;
+  color: #575252;
+  cursor: not-allowed;
 }
 
 .react-calendar__navigation {
-  background-color: #61a3ac; /* Neutralny kolor tła dla navigacji kalendarza */
+  background-color: #61a3ac;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -88,10 +95,29 @@
 }
 
 .react-calendar__navigation button {
-  background-color: #f2f2f2; /* Neutralny kolor tła dla przycisków navigacji */
-  color: #333; /* Kolor czcionki dla przycisków navigacji */
+  background-color: #f2f2f2;
+  color: #333;
   font-size: 20px;
   padding: 4px 8px;
   border: none;
   cursor: pointer;
+}
+
+.book-room-button {
+  background-color: #61a3ac;
+  display: flex;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 600px;
+  margin: 10px auto;
+  display: block;
+}
+
+.book-room-button:hover {
+  background-color: #0056b3;
 }
