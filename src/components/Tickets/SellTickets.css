@@ -1,0 +1,96 @@
+.sell-tickets-container {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.sell-tickets-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.sell-tickets-container .form-group {
+  margin-bottom: 15px;
+}
+
+.sell-tickets-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.sell-tickets-container input[type="email"],
+.sell-tickets-container input[type="number"],
+.sell-tickets-container select {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.sell-tickets-container input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.sell-tickets-container .ticket-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.sell-tickets-container .ticket-price {
+  margin-right: 10px;
+  text-decoration: line-through;
+  color: red;
+}
+
+.sell-tickets-container .promotion-price {
+  color: red;
+}
+
+.sell-tickets-container h3 {
+  text-align: right;
+}
+
+.sell-tickets-container button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.sell-tickets-container button:hover {
+  background-color: #0056b3;
+}
+
+.sell-tickets-container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.sell-tickets-container p {
+  color: red;
+  font-size: 14px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px; /* Adjust space between checkbox and label */
+}

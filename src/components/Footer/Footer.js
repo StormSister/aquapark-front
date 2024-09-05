@@ -38,6 +38,7 @@ const Footer = ({ showModal }) => {
       <hr />
       <div className="footer-bottom">
         ©{new Date().getFullYear()} Balneario El Arenal. All rights reserved.
+        <p>Authors: Monika Gudalewska & Jan Surowiak</p>
       </div>
     </footer>
   );

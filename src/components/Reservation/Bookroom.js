@@ -208,7 +208,9 @@ const ReservationForm = () => {
           className="form-input"
         />
       </div>
-      <button onClick={checkAvailableRooms}>Check Available Rooms</button>
+      <button className="book-room-button" onClick={checkAvailableRooms}>
+        Check Available Rooms
+      </button>
 
       {availableRooms.length > 0 && (
         <div>
@@ -224,7 +226,9 @@ const ReservationForm = () => {
           </div>
           <div>
             <h3>Total Price: ${totalPrice.toFixed(2)}</h3>
-            <button onClick={handleSubmit}>Book</button>
+            <button className="book-room-button" onClick={handleSubmit}>
+              Book
+            </button>
           </div>
         </div>
       )}
@@ -288,7 +292,9 @@ const ReservationForm = () => {
               <div className="error">{userForm.errors.phoneNumber}</div>
             ) : null}
           </div>
-          <button type="submit">Proceed to Payment</button>
+          <button className="book-room-button" type="submit">
+            Proceed to Payment
+          </button>
         </form>
       )}
     </div>
