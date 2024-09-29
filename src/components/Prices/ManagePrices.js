@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import EditPriceForm from './EditPriceForm';
-import DeletePriceButton from './DeletePriceButton';
-import AddPriceForm from './AddPriceForm';
-import './ManagePrices.css'; 
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import EditPriceForm from "./EditPriceForm";
+import DeletePriceButton from "./DeletePriceButton";
+import AddPriceForm from "./AddPriceForm";
+import "./ManagePrices.css";
 
 const ManagePrices = () => {
   const [prices, setPrices] = useState([]);
@@ -11,16 +11,16 @@ const ManagePrices = () => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   const getAuthToken = () => {
-    return localStorage.getItem('accessToken'); // Pobieranie tokena z localStorage
+    return localStorage.getItem("accessToken"); // Pobieranie tokena z localStorage
   };
 
   const fetchPrices = async () => {
     try {
       const token = getAuthToken(); // Pobieranie tokena
-      const response = await axios.get('http://localhost:8080/prices');
+      const response = await axios.get("http://localhost:8080/prices");
       setPrices(response.data);
     } catch (error) {
-      console.error('Error fetching prices:', error);
+      console.error("Error fetching prices:", error);
     }
   };
 
@@ -44,9 +44,6 @@ const ManagePrices = () => {
 
   return (
     <div>
-      <h2>Manage Prices</h2>
-
-      <h3>All Prices</h3>
       <table className="prices-table">
         <thead>
           <tr>
@@ -64,10 +61,17 @@ const ManagePrices = () => {
               <td>{price.price}</td>
               <td>
                 <div className="button-container">
-                  <button className="edit-button" onClick={() => handleEditPrice(price)}>
+                  <button
+                    className="edit-button"
+                    onClick={() => handleEditPrice(price)}
+                  >
                     Edit
                   </button>
-                  <DeletePriceButton priceId={price.id} onDelete={fetchPrices} />
+                  <DeletePriceButton
+                    className="delete-button"
+                    priceId={price.id}
+                    onDelete={fetchPrices}
+                  />
                 </div>
               </td>
             </tr>
@@ -75,11 +79,13 @@ const ManagePrices = () => {
         </tbody>
       </table>
 
-      {/* Formularz edycji ceny */}
-      {selectedPrice && <EditPriceForm price={selectedPrice} onClose={handleCloseForm} />}
+      {selectedPrice && (
+        <EditPriceForm price={selectedPrice} onClose={handleCloseForm} />
+      )}
 
-      {/* Formularz dodawania nowej ceny */}
-      {showAddForm && <AddPriceForm onClose={handleCloseForm} onAdd={fetchPrices} />} 
+      {showAddForm && (
+        <AddPriceForm onClose={handleCloseForm} onAdd={fetchPrices} />
+      )}
 
       <button onClick={handleAddPrice}>Add New Price</button>
     </div>
@@ -87,9 +93,3 @@ const ManagePrices = () => {
 };
 
 export default ManagePrices;
-
-
-
-
-
-

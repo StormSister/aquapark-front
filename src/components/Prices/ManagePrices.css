@@ -1,49 +1,51 @@
 .prices-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .prices-table th, .prices-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  .prices-table th {
-    background-color: #f2f2f2;
-  }
-  
-  .action-buttons {
-    display: flex;
-    gap: 5px; /* Adjust as needed for spacing between buttons */
-  }
-  
-  .edit-button {
-    width: 80px; /* Szerokość guzika */
-    height: 30px; /* Wysokość guzika */
-    padding: 5px; /* Wewnętrzny padding guzika */
-    font-size: 14px; /* Rozmiar czcionki */
-    background-color: #007bff; /* Kolor tła */
-    color: white; /* Kolor tekstu */
-    border: none; /* Brak obramowania */
-    cursor: pointer; /* Kursor wskazujący */
-  }
-  
-  .edit-button:hover {
-    background-color: #3b80ca; /* Kolor tła po najechaniu */
-  }
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 80px;
+}
 
-  .delete-button{ width: 80px; /* Szerokość guzika */
-    height: 30px; /* Wysokość guzika */
-    padding: 5px; /* Wewnętrzny padding guzika */
-    font-size: 14px; /* Rozmiar czcionki */
-    background-color: #007bff; /* Kolor tła */
-    color: white; /* Kolor tekstu */
-    border: none; /* Brak obramowania */
-    cursor: pointer; /* Kursor wskazujący */
-  }
+.prices-table th,
+.prices-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
 
-  .delete-button:hover {
-    background-color: #c51414; /* Kolor tła po najechaniu */
-  }
+.prices-table th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.edit-button,
+.delete-button {
+  width: 100px;
+  height: 40px;
+  padding: 10px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: inline-block;
+}
+
+.edit-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #45a049;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+}

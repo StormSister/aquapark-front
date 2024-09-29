@@ -4,11 +4,11 @@
   box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
   height: 100%;
   margin: 0;
 }
-
 
 .home-container {
   padding-bottom: 390px;
@@ -31,8 +31,8 @@ body {
 }
 .hero-section {
   height: 100vh; /* Wysokość pełnego okna przeglądarki */
-  width: 100vw;  /* Szerokość pełnego okna przeglądarki */
- background-image: url("/assets/images/bal_front.jpg");/* Ścieżka absolutna do obrazka */
+  width: 100vw; /* Szerokość pełnego okna przeglądarki */
+  background-image: url("/public/assets/images/bal_front.jpg"); /* Ścieżka absolutna do obrazka */
   background-size: cover;
   background-position: center;
   display: flex;
